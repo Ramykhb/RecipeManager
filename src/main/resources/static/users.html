@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add New User (JSON)</title>
+</head>
+<body>
+<h1>Add New User (JSON)</h1>
+<form id="userForm">
+    <div>
+        <label for="username">Name:</label>
+        <input type="text" id="username" name="username" required/>
+    </div>
+    <br/>
+    <div>
+        <label for="password">password:</label>
+        <input type="password" id="password" name="password" required/>
+    </div>
+    <br/>
+    <button type="submit">Add User (JSON)</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('userForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => response.json()) // Or response.text() if your server returns plain text
+                .then(data => {
+                    console.log('Success:', data);
+                    // Optionally update the UI to show success
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Optionally update the UI to show an error
+                });
+        });
+    });
+</script>
+</body>
+</html>
