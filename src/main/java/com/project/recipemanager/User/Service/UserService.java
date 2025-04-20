@@ -4,6 +4,7 @@ import com.project.recipemanager.User.Model.User;
 import com.project.recipemanager.User.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Optional;
 
@@ -18,9 +19,28 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            return user.getPassword().equals(password) ? user.getId() : "";
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                return user.getId();
+            } else {
+                return "";
+            }
         } else {
             return "";
         }
     }
+    public String signup(String username, String password) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            return "";
+        } else {
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setPassword(hashedPassword);
+            userRepository.save(newUser);
+            return newUser.getId();
+        }
+    }
+
+
 }

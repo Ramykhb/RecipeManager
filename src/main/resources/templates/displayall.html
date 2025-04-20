@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-field {
+            margin-bottom: 15px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3278c8;
+        }
+
+        .recipe-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .recipe-table th,
+        .recipe-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .recipe-table th {
+            background-color: #3897f0;
+            color: white;
+        }
+
+        .recipe-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .recipe-table tr:hover {
+            background-color: #e6f7ff;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>All Recipes</h1>
+    <table class="recipe-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+            <th>Cooking Time</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody id="recipeTableBody">
+        <!-- Recipes will be inserted here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tableBody = document.getElementById('recipeTableBody');
+
+        // Sample data for display
+        const recipes = [
+            {
+                id: 1,
+                title: "Spaghetti Bolognese",
+                description: "Classic Italian pasta with meat sauce",
+                ingredients: ["Spaghetti", "Ground beef", "Tomato sauce"],
+                instructions: ["Boil spaghetti", "Cook beef", "Combine ingredients"],
+                cookingTime: "30 minutes",
+                category: "Italian",
+                author: "John Doe",
+                createdAt: "2025-04-01"
+            },
+            {
+                id: 2,
+                title: "Caesar Salad",
+                description: "Romaine lettuce with creamy Caesar dressing",
+                ingredients: ["Lettuce", "Caesar dressing", "Croutons"],
+                instructions: ["Mix ingredients", "Serve cold"],
+                cookingTime: "10 minutes",
+                category: "Salad",
+                author: "Jane Smith",
+                createdAt: "2025-04-02"
+            }
+        ];
+
+        recipes.forEach(recipe => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${recipe.id}</td>
+                <td>${recipe.title}</td>
+                <td>${recipe.description}</td>
+                <td>${recipe.ingredients.join(", ")}</td>
+                <td>${recipe.instructions.join(", ")}</td>
+                <td>${recipe.cookingTime}</td>
+                <td>${recipe.category}</td>
+                <td>${recipe.author}</td>
+                <td>${recipe.createdAt}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    });
+</script>
+
+</body>
+</html>

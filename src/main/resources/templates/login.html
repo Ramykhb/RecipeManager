@@ -18,35 +18,41 @@
     <br/>
     <button type="submit">Add User (JSON)</button>
 </form>
+<p>don't have an account? <a href="/users/signup">signup</a> </p>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('userForm');
 
         form.addEventListener('submit', function(event) {
-            event.preventDefault();
+        event.preventDefault();
 
-            const formData = new FormData(form);
-            const jsonData = {};
-            formData.forEach((value, key) => {
-                jsonData[key] = value;
-            });
+        const formData = new FormData(form);
+        const jsonData = {};
+        formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
 
-            fetch('/api/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        });
+        fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+    },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+        if (response.ok) {
+        console.log('✅ Login success!');
+        window.location.href = "/users/homepage";
+    } else {
+        console.log('❌ Login failed with status:', response.status);
+        alert("Invalid credentials. Please try again.");
+    }
+    })
+        .catch((error) => {
+        console.error('⚠️ Error:', error);
+    });
+    });
     });
 </script>
 </body>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h1>Add a New Recipe</h1>
+    <form id="recipeForm">
+        <div class="form-field">
+            <label for="title">Recipe Title:</label>
+            <input type="text" id="title" name="title" required />
+        </div>
+
+        <div class="form-field">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+
+        <div class="form-field">
+            <label for="ingredients">Ingredients (comma separated):</label>
+            <input type="text" id="ingredients" name="ingredients" required />
+        </div>
+
+        <div class="form-field">
+            <label for="instructions">Instructions (comma separated):</label>
+            <input type="text" id="instructions" name="instructions" required />
+        </div>
+
+        <div class="form-field">
+            <label for="cookingTime">Cooking Time (in minutes):</label>
+            <input type="text" id="cookingTime" name="cookingTime" required />
+        </div>
+
+        <div class="form-field">
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" required />
+        </div>
+
+        <div class="form-field">
+            <label for="author">Author:</label>
+            <input type="text" id="author" name="author" required />
+        </div>
+
+        <div class="form-field">
+            <label for="createdAt">Creation Date:</label>
+            <input type="text" id="createdAt" name="createdAt" value="2025-04-20" required />
+        </div>
+
+        <button type="submit">Add Recipe</button>
+        <div class="message" id="message"></div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("userForm");
+    const messageDiv = document.getElementById("message");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        try {
+            const response = await fetch("http://localhost:8081/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email })
+            });
+
+            if (response.ok) {
+                messageDiv.textContent = "✅ Recipe added successfully!";
+                form.reset();
+            } else {
+                messageDiv.textContent = "❌ Failed to add Recipe.";
+            }
+        } catch (err) {
+            console.error(err);
+            messageDiv.textContent = "⚠️ Error connecting to server.";
+        }
+    });
+</script>
+</body>
+</html>
