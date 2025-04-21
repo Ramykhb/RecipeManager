@@ -1,59 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login Page</title>
+    <title>Recipe Manager - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style media="screen">
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #080710;
+            font-size: 16px;
+        }
+
+        .background {
+            width: 26.875em;
+            height: 32.5em;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        .background .shape {
+            height: 12.5em;
+            width: 12.5em;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .shape:first-child {
+            background: linear-gradient(#1845ad, #23a2f6);
+            left: -5em;
+            top: -5em;
+        }
+
+        .shape:last-child {
+            background: linear-gradient(to right, #ff512f, #f09819);
+            right: -1.875em;
+            bottom: -5em;
+        }
+
+        form {
+            height: 32.5em;
+            width: 25em;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 0.625em;
+            backdrop-filter: blur(10px);
+            border: 0.125em solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 2.5em rgba(8,7,16,0.6);
+            padding: 3.125em 2.1875em;
+        }
+
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.03125em;
+            outline: none;
+            border: none;
+        }
+
+        form h3 {
+            font-size: 2em;
+            font-weight: 500;
+            line-height: 2.625em;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 1.875em;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        input {
+            display: block;
+            height: 3.125em;
+            width: 100%;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 0.1875em;
+            padding: 0 0.625em;
+            margin-top: 0.5em;
+            font-size: 0.875em;
+            font-weight: 300;
+        }
+
+        ::placeholder {
+            color: #e5e5e5;
+        }
+
+        button {
+            margin-top: 3.125em;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 0.9375em 0;
+            font-size: 1.125em;
+            font-weight: 600;
+            border-radius: 0.3125em;
+            cursor: pointer;
+        }
+
+        h4 {
+            margin-top: 2em;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .background {
+                width: 90%;
+                height: auto;
+            }
+
+            form {
+                width: 90%;
+                padding: 2.5em 1.5em;
+            }
+
+            form h3 {
+                font-size: 1.75em;
+            }
+
+            label {
+                font-size: 0.9375em;
+            }
+
+            input {
+                height: 2.75em;
+                font-size: 0.875em;
+            }
+
+            button {
+                font-size: 1em;
+                padding: 0.75em 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .background {
+                width: 100%;
+                height: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .background .shape:first-child,
+            .background .shape:last-child {
+                height: 8em;
+                width: 8em;
+            }
+
+            .shape:first-child {
+                left: -4em;
+                top: -4em;
+            }
+
+            .shape:last-child {
+                right: -2em;
+                bottom: -4em;
+            }
+
+            form {
+                width: 90%;
+                padding: 2em 1.25em;
+                margin-left: 1em;
+            }
+
+            form h3 {
+                font-size: 1.5em;
+                line-height: 2em;
+            }
+
+            label {
+                margin-top: 1.5em;
+                font-size: 0.875em;
+            }
+
+            input {
+                height: 2.5em;
+                font-size: 0.8125em;
+            }
+
+            button {
+                margin-top: 2.5em;
+                font-size: 0.9375em;
+                padding: 0.75em 0;
+            }
+
+            h4 {
+                font-size: 0.875em;
+            }
+        }
+
+    </style>
 </head>
 <body>
-<h1>Login</h1>
+<div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+</div>
 <form id="userForm">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required/>
-    </div>
-    <br/>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required/>
-    </div>
-    <br/>
-    <button type="submit">Add User (JSON)</button>
-</form>
-<p>don't have an account? <a href="/users/signup">signup</a> </p>
+    <h3>Login Here</h3>
 
+    <label for="username">Username</label>
+    <input type="text" placeholder="Username" id="username" name="username">
+
+    <label for="password">Password</label>
+    <input type="password" placeholder="Password" id="password" name="password">
+    <button>Log In</button>
+    <h4>Don't have an account? <a href="/users/signup">Signup.</a> </h4>
+</form>
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('userForm');
 
         form.addEventListener('submit', function(event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        const formData = new FormData(form);
-        const jsonData = {};
-        formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+                console.log(key);
+                console.log(value);
+            });
 
-        fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-    },
-        body: JSON.stringify(jsonData)
-    })
-        .then(response => {
-        if (response.ok) {
-        console.log('✅ Login success!');
-        window.location.href = "/users/homepage";
-    } else {
-        console.log('❌ Login failed with status:', response.status);
-        alert("Invalid credentials. Please try again.");
-    }
-    })
-        .catch((error) => {
-        console.error('⚠️ Error:', error);
-    });
-    });
+            fetch('/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Login success!');
+                        window.location.href = "/users/homepage";
+                    } else {
+                        console.log('❌ Login failed with status:', response.status);
+                        alert("Invalid credentials. Please try again.");
+                    }
+                })
+                .catch((error) => {
+                    console.error('⚠️ Error:', error);
+                });
+        });
     });
 </script>
+
 </body>
 </html>

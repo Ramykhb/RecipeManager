@@ -32,7 +32,7 @@ public class UserRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signupUser(@RequestBody User user, HttpSession session) {
+    public ResponseEntity<?> signupUser(@RequestBody User user, HttpSession session) {
         String newUserId = userService.signup(user.getUsername(), user.getPassword());
         if (!newUserId.equals("")) {
             session.setAttribute("sessionId", newUserId);
@@ -44,9 +44,10 @@ public class UserRestController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User user, HttpSession session) {
+        System.out.println(user.getUsername()+ " "+ user.getPassword());
         String tempId = userService.login(user.getUsername(), user.getPassword());
-
-        if (!tempId.isEmpty()) {
+        System.out.println(tempId);
+        if (!tempId.equals("")) {
             session.setAttribute("sessionId", tempId);
             return ResponseEntity.ok().build();
         } else {
