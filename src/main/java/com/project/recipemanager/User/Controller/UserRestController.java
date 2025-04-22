@@ -26,7 +26,6 @@ public class UserRestController {
         this.userService = userService;
     }
 
-
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody User user, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -55,6 +54,15 @@ public class UserRestController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logoutUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            session.invalidate();
+        System.out.println("HELLO");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out");
     }
 
 }

@@ -96,6 +96,7 @@
 
 <div class="container">
     <h1>All Recipes</h1>
+    <button id="logout">LOGOUT</button>
     <table class="recipe-table">
         <thead>
         <tr>
@@ -139,6 +140,21 @@
             });
         });
     });
+
+    const button = document.getElementById('logout');
+
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const jsonData = {};
+        fetch('/api/users/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({jsonData})
+        })
+        location.reload();
+    })
 </script>
 
 </body>
