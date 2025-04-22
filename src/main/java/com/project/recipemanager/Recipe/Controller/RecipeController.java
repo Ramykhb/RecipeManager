@@ -1,6 +1,7 @@
 package com.project.recipemanager.Recipe.Controller;
 
 import com.project.recipemanager.Recipe.Repository.RecipeRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,50 +15,56 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
 
     @GetMapping()
-    public String allRecipes(HttpSession Session)
+    public String allRecipes(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // all recipes
-        return "all-recipes";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "all-recipes";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/{id}")
-    public String singleRecipes(HttpSession Session)
+    public String singleRecipes(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // single recipe
-        return "single-recipe";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "single-recipe";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/saved")
-    public String savedRecipes(HttpSession Session)
+    public String savedRecipes(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // saved recipes
-        return "saved-recipes";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "saved-recipes";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/my-posts")
-    public String myRecipes(HttpSession Session)
+    public String myRecipes(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // my posts
-        return "my-recipes";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "my-recipes";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/my-posts/{id}")
-    public String editRecipe(HttpSession Session)
+    public String editRecipe(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // edit post
-        return "edit-recipe";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "edit-recipe";
+        return "redirect:/users/login";
     }
 
     @GetMapping("/my-posts/new-post")
-    public String addRecipes(HttpSession Session)
+    public String addRecipes(HttpServletRequest request)
     {
-        //TODO: Check if logged in: allow, if not redirect to login
-        // new post
-        return "add-recipe";
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "add-recipe";
+        return "redirect:/users/login";
     }
 }

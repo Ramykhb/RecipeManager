@@ -15,25 +15,20 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @GetMapping()
-    public void redirectToPage(HttpSession session)
-    {
-        // TODO: check if logged in -> redirect to recipes
-        // TODO: if not -> redirect to login
-        // TODO: yemken lezem naamela b userrestcontroller
-    }
-
     @GetMapping("/login")
     public String getLoginPage(HttpServletRequest request)
     {
         HttpSession session = request.getSession(false);
-        if (session != null)
-            System.out.println("TEST");
+        if (session != null && session.getAttribute("sessionId") != null){
+            return "redirect:/recipes";}
         return "login";
     }
 
     @GetMapping("/signup")
-    public String getSignupPage() {
+    public String getSignupPage(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null)
+            return "redirect:/recipes";
         return "signup";
     }
 

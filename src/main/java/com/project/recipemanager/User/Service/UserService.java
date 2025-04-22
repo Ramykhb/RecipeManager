@@ -15,7 +15,6 @@ public class UserService {
     private UserRepository userRepository;
     public String login(String username, String password)
     {
-        // TODO: HASH PASSWORDS
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

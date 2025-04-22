@@ -3,6 +3,7 @@ package com.project.recipemanager.User.Controller;
 import com.project.recipemanager.User.Model.User;
 import com.project.recipemanager.User.Repository.UserRepository;
 import com.project.recipemanager.User.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,17 +26,16 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getUsers()
-    {
-        return ResponseEntity.ok(userRepository.findAll());
-    }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signupUser(@RequestBody User user, HttpSession session) {
+    public ResponseEntity<?> signupUser(@RequestBody User user, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User already logged in");
         String newUserId = userService.signup(user.getUsername(), user.getPassword());
         if (!newUserId.equals("")) {
-            session.setAttribute("sessionId", newUserId);
+            HttpSession sessionNew = request.getSession(true);
+            sessionNew.setAttribute("sessionId", newUserId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -43,12 +43,14 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user, HttpSession session) {
-        System.out.println(user.getUsername()+ " "+ user.getPassword());
+    public ResponseEntity<?> loginUser(@RequestBody User user, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User already logged in");
         String tempId = userService.login(user.getUsername(), user.getPassword());
-        System.out.println(tempId);
         if (!tempId.equals("")) {
-            session.setAttribute("sessionId", tempId);
+            HttpSession sessionNew = request.getSession(true);
+            sessionNew.setAttribute("sessionId", tempId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
