@@ -30,6 +30,8 @@ public class Recipe {
 
     private String createdAt;
 
+    private String imageURL;
+
     public String getId() {
         return id;
     }
@@ -101,4 +103,5 @@ public class Recipe {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
 }

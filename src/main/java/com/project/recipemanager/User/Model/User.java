@@ -13,6 +13,7 @@ public class User {
     private String id;
     private String username;
     private String password;
+    private boolean isAdmin;
     private List<String> saved;
 
     public String getId() {
@@ -38,4 +39,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public List<String> getFavorites() {
+        return saved;
+    }
+
 }

@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+
 
 @Controller
 @RequestMapping("/recipes")
@@ -42,12 +44,14 @@ public class RecipeController {
     }
 
     @GetMapping("/my-posts")
-    public String myRecipes(HttpServletRequest request)
-    {
+    public String myRecipes(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("sessionId") != null)
-            return "my-recipes";
-        return "redirect:/users/login";
+        if (session == null || session.getAttribute("sessionId") == null) {
+            return "redirect:/users/login";
+        }
+        String userId = (String) session.getAttribute("sessionId");
+        model.addAttribute("userId", userId);
+        return "my-recipes";
     }
 
     @GetMapping("/my-posts/{id}")

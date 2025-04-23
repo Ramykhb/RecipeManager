@@ -2,9 +2,177 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>My Recipes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            width: 90%;
+            max-width: 900px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3897f0;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #ffffff;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            z-index: 1000;
+        } button {
+              background-color: #3897f0;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 4px;
+              cursor: pointer;
+          }
+
+        button:hover {
+            background-color: #3278c8;
+        }
+    </style>
 </head>
 <body>
+<header>
+    <div class="header-left">
+        <h2>My Posts</h2>
+    </div>
+    <div class="header-right">
+        <button onclick="navigateToNew()">➕ New Post</button>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <h1>My Recipes</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Ingredients</th>
+                <th>Instructions</th>
+                <th>Cooking Time</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody id="recipeTableBody">
+            <!-- Recipes will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer>
+    <a href="/recipes"><p>🏠 Home</p></a>
+    <a href="/recipes/saved-recipes"><p>⭐ Favorites</p></a>
+    <a href="/recipes/my-posts"><p>📁 My Posts</p></a>
+</footer>
+
+<script th:inline="javascript">
+    const loggedInUserId = /*[[${userId}]]*/ '';
+    function navigateToNew() {
+        window.location.href = "/recipes/my-posts/new-post";
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        fetch('/api/recipes')
+            .then(res => res.json())
+            .then(data => {
+                const tableBody = document.getElementById('recipeTableBody');
+                tableBody.innerHTML = '';
+
+                const myRecipes = data.filter(recipe => recipe.author === loggedInUserId);
+
+                if (myRecipes.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td colspan="9">No recipes found for your account.</td>`;
+                    tableBody.appendChild(row);
+                } else {
+                    myRecipes.forEach(recipe => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${recipe.id}</td>
+                            <td>${recipe.title}</td>
+                            <td>${recipe.description}</td>
+                            <td>${recipe.ingredients.join(", ")}</td>
+                            <td>${recipe.instructions.join(", ")}</td>
+                            <td>${recipe.cookingTime}</td>
+                            <td>${recipe.category}</td>
+                            <td>${recipe.author}</td>
+                            <td>${recipe.createdAt}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching recipes:', err);
+                alert('Error loading recipes. Please try again later.');
+            });
+    });
+</script>
 
 </body>
 </html>
