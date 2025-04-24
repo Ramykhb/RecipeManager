@@ -31,7 +31,19 @@ public class RecipeRestController {
     @GetMapping
     public ResponseEntity<List<Recipe>> getRecipes()
     {
-        return ResponseEntity.ok(recipeRepository.findAll());
+        List<Recipe> recipes = recipeRepository.findAll();
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
+
+        return ResponseEntity.ok(recipes);
     }
 
     @PostMapping
@@ -45,6 +57,9 @@ public class RecipeRestController {
         String formattedDate = now.format(dateFormatter);
         recipe.setCreatedAt(formattedDate);
         recipe.setAuthor(session.getAttribute("sessionId").toString());
+        if (recipe.getImageURL() == null || recipe.getImageURL().equals("")){
+            recipe.setImageURL("https://www.cezarskitchen.com.my/wp-content/themes/consultix/images/no-image-found-360x250.png");
+        }
         recipeRepository.save(recipe);
         return ResponseEntity.ok().build();
     }

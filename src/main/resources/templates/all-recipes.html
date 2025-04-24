@@ -1,39 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            width: 90%;
-            max-width: 900px;
+        body {
+            font-size: 22px;
+            background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
+        }
+
+        main {
+            width: 100%;
+            padding: 2em;
+        }
+
+        #container {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 1em 3em;
+        }
+
+        .recipe-card {
+            font-family: "Oswald";
+            width: 20em;
+            border: 1px solid #939393;
+            height: 17em;
+            color: aliceblue;
+            margin-bottom: 5em;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+
+        .recipe-image {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            width: 100%;
+            height: 7.5em;
+            background-image: url("https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .recipe-card h2 {
+            margin: 0.4em 0 0.4em 0.5em;
+            color: #f8f8f8;
+        }
+
+        a,
+        a:visited,
+        a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .recipe-card p {
+            margin: 0.4em 1em;
+            font-size: 0.8em;
+            color: #d5d5d5;
         }
 
         h1 {
+            font-family: "Bebas Neue";
             text-align: center;
             margin-bottom: 30px;
-            color: #333;
-        }
-
-        h2 {
-            margin-bottom: 20px;
+            color: #ededed;
         }
 
         button {
-            background-color: #3897f0;
+            background-color: #ea800b;
             color: white;
+            font-family: "Bebas Neue";
+            font-size: 1.3em;
+            margin-left: 4em;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
@@ -41,127 +89,61 @@
         }
 
         button:hover {
-            background-color: #3278c8;
+            background-color: #f8a245;
         }
 
-        .recipe-table {
+        nav {
+            font-size: 0.8em;
+            font-family: "Bebas Neue", sans-serif;
             width: 100%;
-            border-collapse: collapse;
+            height: 15vh;
+            display: flex;
+            padding: 2em 3em;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
         }
 
-        .recipe-table th,
-        .recipe-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
+        nav img,
+        footer img {
+            width: 8em;
+            height: auto;
+            margin-left: 3.5em;
         }
 
-        .recipe-table th {
-            background-color: #3897f0;
+        nav>ul {
+            display: flex;
+            justify-content: space-between;
+            width: 30%;
+            margin: 0 3em;
+            list-style: none;
+            font-size: 1.4em;
             color: white;
         }
 
-        .recipe-table tr:nth-child(even) {
-            background-color: #f2f2f2;
+        nav>ul>li {
+            display: block;
         }
 
-        .recipe-table tr:hover {
-            background-color: #e6f7ff;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: sans-serif;
-        }
-
-        body {
-            padding-top: 60px;
-            padding-bottom: 60px;
-            background-color: #f7f7f7;
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            z-index: 1000;
-        }
-
-        header input {
-            padding: 6px;
-            width: 250px;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background-color: #ffffff;
-            border-top: 1px solid #ccc;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        main {
-            padding: 20px;
-        }
     </style>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
-<body>
-<header>
-    <div class="header-left">
-        <h2>RecipeShare</h2>
-    </div>
-    <div class="header-center">
-        <input type="text" id="searchInput" placeholder="Search recipe by name">
-    </div>
-    <div class="header-right">
-        <button onclick="logout()">Logout</button>
-    </div>
-</header>
 
+<body id="body">
+<nav>
+    <a href="/recipes"><img th:src="@{/images/logo.svg}" alt="logo" /></a>
+    <ul>
+        <li><a href="/recipes">HOME</a></li>
+        <li><a href="/recipes/saved">FAVORITES</a></li>
+        <li><a href="/recipes/my-posts">MY POSTS</a></li>
+    </ul>
+    <button onclick="logout()">Logout</button>
+</nav>
 <main>
-<div class="container">
     <h1>All Recipes</h1>
-    <table class="recipe-table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Ingredients</th>
-            <th>Instructions</th>
-            <th>Cooking Time</th>
-            <th>Category</th>
-            <th>Author</th>
-            <th>Created At</th>
-        </tr>
-        </thead>
-        <tbody id="recipeTableBody">
-        <!-- Recipes will be inserted here -->
-        </tbody>
-    </table>
-</div>
+    <div id="container">
+    </div>
 </main>
-<footer>
-    <a href="/recipes"><p>🏠 Home</p></a>
-    <a href="/recipes/saved"><p>⭐ Favorites</p></a>
-    <a href="/recipes/my-posts"><p>📁 My Posts</p></a>
-</footer>
-
 <script>
     function logout() {
         fetch('/api/users/logout', {
@@ -182,31 +164,41 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-            fetch('/api/recipes')
+        fetch('/api/recipes')
             .then(response => response.json())
             .then(data => {
-            const tableBody = document.getElementById('recipeTableBody');
-            data.forEach(recipe => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${recipe.id}</td>
-                <td>${recipe.title}</td>
-                <td>${recipe.description}</td>
-                <td>${recipe.ingredients.join(", ")}</td>
-                <td>${recipe.instructions.join(", ")}</td>
-                <td>${recipe.cookingTime}</td>
-                <td>${recipe.category}</td>
-                <td>${sessionStorage.getItem("username")}</td>
-                <td>${recipe.createdAt}</td>
-            `;
-                tableBody.appendChild(row);
+                const container = document.getElementById('container');
+                var count = 0;
+                data.forEach(recipe => {
+                    count+= 1;
+                    const card_a = document.createElement('a');
+                    card_a.href = `/recipes/${recipe.id}`;
+                    const card = document.createElement('div');
+                    card.className = 'recipe-card';
+                    card.innerHTML = `
+                            <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
+                            <h2>${recipe.title}</h2>
+                            <p>Category: ${recipe.category}</p>
+                            <p>${recipe.cookingTime} minutes</p>
+                            <div style="width: 100%; display: flex; justify-content: space-between">
+                            <p>Posted By: ${recipe.author}</p>
+                            <p>${recipe.createdAt}</p>
+</div>
+                        `;
+                    card_a.appendChild(card);
+                    container.appendChild(card_a);
+                });
+                if (count <=3)
+                {
+                    const body = document.getElementById("body");
+                    body.style.height = "100vh";
+                }
             });
-        });
     });
 
     const button = document.getElementById('logout');
 
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function (event) {
         event.preventDefault();
         const jsonData = {};
         fetch('/api/users/logout', {
@@ -214,11 +206,12 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({jsonData})
+            body: JSON.stringify({ jsonData })
         })
         location.reload();
     })
 </script>
 
 </body>
+
 </html>

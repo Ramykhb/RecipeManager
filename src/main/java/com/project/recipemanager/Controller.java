@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping()
 @org.springframework.stereotype.Controller
 public class Controller {
-    @GetMapping("/**")
-    public String notfound(){
-        return "redirect:/recipes";
-    }
+//    @GetMapping("/**")
+//    public String notfound(){
+//        return "redirect:/recipes";
+//    }
 }
