@@ -87,19 +87,18 @@ public class RecipeRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRecipe(@PathVariable String id, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("sessionId") == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<?> deleteRecipe(@PathVariable String id, HttpSession session) {
+        String userId = (String) session.getAttribute("sessionId");
 
-        String userId = session.getAttribute("sessionId").toString();
-        return recipeRepository.findById(id).map(recipe -> {
-            if (!recipe.getAuthor().equals(userId)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-            recipeRepository.delete(recipe);
+        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe != null && recipe.getAuthor().equals(userId)) {
+            recipeRepository.deleteById(id);
             return ResponseEntity.ok().build();
-        }).orElse(ResponseEntity.notFound().build());
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own recipes.");
     }
 
     @PostMapping("/favorites/{id}")

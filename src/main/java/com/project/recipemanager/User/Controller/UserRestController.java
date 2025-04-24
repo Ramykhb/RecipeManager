@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -64,5 +65,17 @@ public class UserRestController {
         System.out.println("HELLO");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out");
     }
+
+    @PostMapping("/favorites/add")
+    public ResponseEntity<?> addFavorite(@RequestBody Map<String, String> body, HttpSession session) {
+        String recipeId = body.get("recipeId");
+        String userId = (String) session.getAttribute("sessionId");
+
+        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        userService.addToFavorites(userId, recipeId);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

@@ -1,10 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Saved Recipes</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header, footer {
+            background-color: #333;
+            color: white;
+            padding: 12px 20px;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header {
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            bottom: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        main {
+            padding: 80px 20px 60px; /* room for header and footer */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+
+<header>
+    <div><strong>Saved Recipes</strong></div>
+    <div>
+        <input type="text" placeholder="Search by name" id="searchBox">
+        <button onclick="logout()">Logout</button>
+    </div>
+</header>
+
+<main>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="favoritesTableBody">
+        <!-- Favorites will be populated here -->
+        </tbody>
+    </table>
+</main>
+
+<footer>
+    <a href="/recipes">Home</a>
+    <a href="/recipes/saved">Favorites</a>
+    <a href="/recipes/my-posts">My Posts</a>
+</footer>
+
+<script th:inline="javascript">
+    const userId = /*[[${userId}]]*/ '';
+
+    function logout() {
+        fetch('/api/users/logout', { method: 'POST' })
+            .then(() => window.location.href = '/users/login');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/recipes')
+            .then(res => res.json())
+            .then(allRecipes => {
+                fetch(`/api/users/${userId}`)
+                    .then(res => res.json())
+                    .then(user => {
+                        const favoriteIds = user.saved || [];
+                        const favorites = allRecipes.filter(r => favoriteIds.includes(r.id));
+                        const tbody = document.getElementById('favoritesTableBody');
+
+                        if (favorites.length === 0) {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `<td colspan="4">No saved recipes found.</td>`;
+                            tbody.appendChild(row);
+                        } else {
+                            favorites.forEach(recipe => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${recipe.title}</td>
+                                    <td>${recipe.description}</td>
+                                    <td>${recipe.category}</td>
+                                    <td>
+                                        <button onclick="removeFromFavorites('${recipe.id}')">Remove</button>
+                                    </td>
+                                `;
+                                tbody.appendChild(row);
+                            });
+                        }
+                    });
+            });
+    });
+
+    function removeFromFavorites(recipeId) {
+        fetch('/api/users/favorites/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ recipeId })
+        })
+            .then(res => {
+                if (res.ok) location.reload();
+                else alert("Error removing favorite.");
+            });
+    }
+</script>
 
 </body>
 </html>

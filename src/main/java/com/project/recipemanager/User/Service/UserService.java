@@ -41,5 +41,15 @@ public class UserService {
         }
     }
 
+    public void addToFavorites(String userId, String recipeId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        userOptional.ifPresent(user -> {
+            if (!(user.getFavorites().contains(recipeId))) {
+                user.getFavorites().add(recipeId);
+                userRepository.save(user);
+            }
+        });
+    }
+
 
 }
