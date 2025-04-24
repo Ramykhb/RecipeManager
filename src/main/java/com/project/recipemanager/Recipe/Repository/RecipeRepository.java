@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
-    Object findByTitleContainingIgnoreCase(String title);
+    List<Recipe> findByTitleContainingIgnoreCase(String title);
 
-    Object findByAuthor(String userId);
+    List<Recipe> findByAuthor(String author);
 
     List<Recipe> findByIdIn(List<String> ids);
 

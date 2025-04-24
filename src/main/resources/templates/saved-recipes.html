@@ -32,7 +32,7 @@
         }
 
         main {
-            padding: 80px 20px 60px; /* room for header and footer */
+            padding: 80px 20px 60px;
         }
 
         table {
@@ -41,18 +41,16 @@
             margin-top: 20px;
         }
 
-        table, th, td {
-            border: 1px solid #ccc;
-        }
-
         th, td {
-            padding: 12px;
-            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
 
         button {
             padding: 5px 10px;
-            margin-right: 5px;
+            background: crimson;
+            color: white;
+            border: none;
             cursor: pointer;
         }
 
@@ -65,9 +63,9 @@
 <body>
 
 <header>
-    <div><strong>Saved Recipes</strong></div>
+    <div><strong>Favorite Recipes</strong></div>
     <div>
-        <input type="text" placeholder="Search by name" id="searchBox">
+        <input type="text" id="searchBox" placeholder="Search by name">
         <button onclick="logout()">Logout</button>
     </div>
 </header>
@@ -83,7 +81,6 @@
         </tr>
         </thead>
         <tbody id="favoritesTableBody">
-        <!-- Favorites will be populated here -->
         </tbody>
     </table>
 </main>
@@ -103,20 +100,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('/api/recipes')
+        // Get user info including saved list
+        fetch(`/api/users/${userId}`)
             .then(res => res.json())
-            .then(allRecipes => {
-                fetch(`/api/users/${userId}`)
+            .then(user => {
+                const favoriteIds = user.saved || [];
+
+                // Now get all recipes
+                fetch('/api/recipes')
                     .then(res => res.json())
-                    .then(user => {
-                        const favoriteIds = user.saved || [];
-                        const favorites = allRecipes.filter(r => favoriteIds.includes(r.id));
+                    .then(allRecipes => {
+                        const favorites = allRecipes.filter(recipe => favoriteIds.includes(recipe.id));
                         const tbody = document.getElementById('favoritesTableBody');
 
                         if (favorites.length === 0) {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `<td colspan="4">No saved recipes found.</td>`;
-                            tbody.appendChild(row);
+                            tbody.innerHTML = `<tr><td colspan="4">No saved recipes found.</td></tr>`;
                         } else {
                             favorites.forEach(recipe => {
                                 const row = document.createElement('tr');
@@ -143,7 +141,7 @@
         })
             .then(res => {
                 if (res.ok) location.reload();
-                else alert("Error removing favorite.");
+                else alert("Failed to remove favorite");
             });
     }
 </script>
