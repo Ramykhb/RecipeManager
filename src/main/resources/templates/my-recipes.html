@@ -159,7 +159,7 @@
     </div>
 </nav>
 <main>
-    <h1>All Recipes</h1>
+    <h1>My Recipes</h1>
     <div id="container">
     </div>
 </main>
@@ -168,23 +168,19 @@
         window.location.href = "/recipes/my-posts/new-post";
     }
 
-    function deleteRecipe(id)
-    {
-        console.log(id);
-        fetch(`/api/recipes/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(response => {
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    console.error('Delete failed');
-                }
+    function deleteRecipe(id) {
+        if (confirm("Are you sure you want to delete this recipe?")) {
+            fetch(`/api/recipes/${id}`, {
+                method: 'DELETE'
             })
-            .catch(error => console.error('Error:', error));
+                .then(res => {
+                    if (res.ok) {
+                        location.reload();
+                    } else {
+                        alert("Failed to delete recipe.");
+                    }
+                });
+        }
     }
 
 

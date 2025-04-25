@@ -4,147 +4,215 @@
     <meta charset="UTF-8">
     <title>Saved Recipes</title>
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        header, footer {
-            background-color: #333;
-            color: white;
-            padding: 12px 20px;
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        header {
-            top: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        footer {
-            bottom: 0;
-            display: flex;
-            justify-content: space-around;
+        body {
+            font-size: 22px;
+            background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
         }
 
         main {
-            padding: 80px 20px 60px;
-        }
-
-        table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            padding: 2em;
         }
 
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+        #favoritesContainer {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 1em 3em;
+        }
+
+        .recipe-card {
+            font-family: "Oswald";
+            width: 20em;
+            border: 1px solid #939393;
+            height: 17em;
+            color: aliceblue;
+            margin-bottom: 5em;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+
+        .recipe-image {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            width: 100%;
+            height: 7.5em;
+            background-image: url("https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .recipe-card h2 {
+            margin: 0.4em 0 0.4em 0.5em;
+            color: #f8f8f8;
+        }
+
+        a,
+        a:visited,
+        a:hover {
+            text-decoration: none;
+            color: white;
+        }
+
+        .recipe-card p {
+            margin: 0.4em 1em;
+            font-size: 0.8em;
+            color: #d5d5d5;
+        }
+
+        h1 {
+            font-family: "Bebas Neue";
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ededed;
         }
 
         button {
-            padding: 5px 10px;
-            background: crimson;
+            background-color: #ea800b;
             color: white;
+            font-family: "Bebas Neue";
+            font-size: 1.3em;
+            margin-left: 4em;
             border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
         }
 
-        a {
-            color: white;
-            text-decoration: none;
+        button:hover {
+            background-color: #f8a245;
         }
+
+        nav {
+            font-size: 0.8em;
+            font-family: "Bebas Neue", sans-serif;
+            width: 100%;
+            height: 15vh;
+            display: flex;
+            padding: 2em 3em;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+        }
+
+        nav img,
+        footer img {
+            width: 8em;
+            height: auto;
+            margin-left: 3.5em;
+        }
+
+        nav>ul {
+            display: flex;
+            justify-content: space-between;
+            width: 30%;
+            margin: 0 3em;
+            list-style: none;
+            font-size: 1.4em;
+            color: white;
+        }
+
+        nav>ul>li {
+            display: block;
+        }
+
     </style>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
-<body>
 
-<header>
-    <div><strong>Favorite Recipes</strong></div>
-    <div>
-        <input type="text" id="searchBox" placeholder="Search by name">
-        <button onclick="logout()">Logout</button>
-    </div>
-</header>
-
+<body id="body">
+<nav>
+    <a href="/recipes"><img th:src="@{/images/logo.svg}" alt="logo" /></a>
+    <ul>
+        <li><a href="/recipes">HOME</a></li>
+        <li><a href="/recipes/saved">FAVORITES</a></li>
+        <li><a href="/recipes/my-posts">MY POSTS</a></li>
+    </ul>
+    <button onclick="logout()">Logout</button>
+</nav>
 <main>
-    <table>
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="favoritesTableBody">
-        </tbody>
-    </table>
+    <h1>Saved Recipes</h1>
+    <div class="container" id="favoritesContainer">
+        <!-- Favorites will be inserted here -->
+    </div>
 </main>
 
-<footer>
-    <a href="/recipes">Home</a>
-    <a href="/recipes/saved">Favorites</a>
-    <a href="/recipes/my-posts">My Posts</a>
-</footer>
-
-<script th:inline="javascript">
-    const userId = /*[[${userId}]]*/ '';
-
+<script>
     function logout() {
-        fetch('/api/users/logout', { method: 'POST' })
-            .then(() => window.location.href = '/users/login');
+        fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'include'
+        }).then(() => window.location.href = '/users/login');
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Get user info including saved list
-        fetch(`/api/users/${userId}`)
-            .then(res => res.json())
-            .then(user => {
-                const favoriteIds = user.saved || [];
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/recipes/favorites', { credentials: 'include' })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch favorites');
+                return res.json();
+            })
+            .then(favorites => {
+                const container = document.getElementById('favoritesContainer');
+                container.innerHTML = '';
 
-                // Now get all recipes
-                fetch('/api/recipes')
-                    .then(res => res.json())
-                    .then(allRecipes => {
-                        const favorites = allRecipes.filter(recipe => favoriteIds.includes(recipe.id));
-                        const tbody = document.getElementById('favoritesTableBody');
+                if (!Array.isArray(favorites) || favorites.length === 0) {
+                    container.innerHTML = `<div>No saved recipes found.</div>`;
+                } else {
+                    favorites.forEach(recipe => {
+                        const card = document.createElement('div');
+                        card.className = 'recipe-card';
 
-                        if (favorites.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="4">No saved recipes found.</td></tr>`;
-                        } else {
-                            favorites.forEach(recipe => {
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                    <td>${recipe.title}</td>
-                                    <td>${recipe.description}</td>
-                                    <td>${recipe.category}</td>
-                                    <td>
-                                        <button onclick="removeFromFavorites('${recipe.id}')">Remove</button>
-                                    </td>
-                                `;
-                                tbody.appendChild(row);
-                            });
-                        }
+                        const card_a = document.createElement('a');
+                        card_a.href = `/recipes/${recipe.id}`;
+                        card_a.classList.add('recipe-link');
+                        card_a.innerHTML = `
+                            <div class="recipe-image" style="background-image: url('${recipe.imageURL || 'default-image.jpg'}');"></div>
+                            <h2>${recipe.title}</h2>
+                            <p>Category: ${recipe.category}</p>
+                            <p>${recipe.cookingTime} minutes</p>
+                            <div class="button-container">
+                                <p>Posted By: ${recipe.author}</p>
+                                <button onclick="removeFromFavorites('${recipe.id}')">Remove</button>
+                            </div>
+                        `;
+
+                        card.appendChild(card_a);
+                        container.appendChild(card);
                     });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Error loading favorites. Please try again later.');
             });
     });
 
     function removeFromFavorites(recipeId) {
-        fetch('/api/users/favorites/remove', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ recipeId })
-        })
-            .then(res => {
-                if (res.ok) location.reload();
-                else alert("Failed to remove favorite");
-            });
+        if (confirm("Are you sure you want to remove this recipe?")) {
+            fetch(`/api/recipes/favorites/${recipeId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+                .then(res => {
+                    if (res.ok) {
+                        location.reload();
+                    } else alert("Failed to remove favorite");
+                });
+        }
     }
 </script>
+
+
+
 
 </body>
 </html>

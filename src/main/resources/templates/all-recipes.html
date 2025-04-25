@@ -162,6 +162,18 @@
             });
     }
 
+    function addToFavorites(recipeId) {
+        fetch('/api/users/favorites/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ recipeId })
+        })
+            .then(res => {
+                if (res.ok) alert("Added to favorites!");
+                else throw new Error("Failed to add to favorites.");
+            })
+            .catch(err => alert(err.message));
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         fetch('/api/recipes')
@@ -184,6 +196,9 @@
                             <p>Posted By: ${recipe.author}</p>
                             <p>${recipe.createdAt}</p>
 </div>
+                    <button class="posts-card" onclick="addToFavorites('${recipe.id}')">
+                            <div></div>
+                        </button>
                         `;
                     card.appendChild(card_a);
                     container.appendChild(card);

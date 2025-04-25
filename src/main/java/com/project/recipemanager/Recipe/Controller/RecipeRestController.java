@@ -148,7 +148,18 @@ public class RecipeRestController {
         }
 
         List<Recipe> favorites = recipeRepository.findByIdIn(favoriteIds);
+        for (Recipe recipe : favorites)
+        {
+            Optional<User> userOption = userRepository.findById(recipe.getAuthor());
+            if (userOption.isPresent()) {
+                User user = userOption.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
         return ResponseEntity.ok(favorites);
+
     }
 
 

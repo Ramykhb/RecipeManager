@@ -243,10 +243,8 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        console.log('✅ Login success!');
                         window.location.href = "/recipes";
                     } else {
-                        console.log('❌ Login failed with status:', response.status);
                         alert("Invalid credentials. Please try again.");
                     }
                 })
