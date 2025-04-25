@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping()
 @org.springframework.stereotype.Controller
 public class Controller {
-//    @GetMapping("/**")
-//    public String notfound(){
-//        return "redirect:/recipes";
-//    }
+    @GetMapping("/images/**")
+    public void images(){
+        return;
+    }
+
+    @GetMapping("/**")
+    public String notfound(){
+        return "redirect:/recipes";
+    }
 }

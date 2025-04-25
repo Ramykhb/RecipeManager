@@ -102,13 +102,12 @@ public class RecipeRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRecipe(@PathVariable String id, HttpSession session) {
-        String userId = (String) session.getAttribute("sessionId");
-
-        if (userId == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+    public ResponseEntity<?> deleteRecipe(@PathVariable String id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("sessionId") == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe != null && recipe.getAuthor().equals(userId)) {
+        if (recipe != null && recipe.getAuthor().equals(session.getAttribute("sessionId").toString())) {
             recipeRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }

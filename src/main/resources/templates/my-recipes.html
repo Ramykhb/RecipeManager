@@ -81,11 +81,26 @@
             color: white;
             font-family: "Bebas Neue";
             font-size: 1.3em;
-            margin-left: 4em;
+            margin-left: 1em;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
+        }
+
+        .posts-card {
+            font-family: "Bebas Neue";
+            background-color: #ed5c5c;
+            margin-right: 0.5em;
+        }
+
+        .posts-card div {
+            background-image: url("/images/trash.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 1em;
+            height: 1em;
         }
 
         button:hover {
@@ -109,6 +124,7 @@
             width: 8em;
             height: auto;
             margin-left: 3.5em;
+            margin-right: 2.5em;
         }
 
         nav>ul {
@@ -137,7 +153,10 @@
         <li><a href="/recipes/saved">FAVORITES</a></li>
         <li><a href="/recipes/my-posts">MY POSTS</a></li>
     </ul>
-    <button onclick="navigateToNew()">NEW POST</button>
+    <div>
+        <button onclick="navigateToNew()">NEW POST</button>
+        <button id="logout">Logout</button>
+    </div>
 </nav>
 <main>
     <h1>All Recipes</h1>
@@ -148,6 +167,26 @@
     function navigateToNew() {
         window.location.href = "/recipes/my-posts/new-post";
     }
+
+    function deleteRecipe(id)
+    {
+        console.log(id);
+        fetch(`/api/recipes/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    console.error('Delete failed');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         fetch('/api/recipes/my-posts')
@@ -160,18 +199,26 @@
                     const card_a = document.createElement('a');
                     card_a.href = `/recipes/my-posts/${recipe.id}`;
                     const card = document.createElement('div');
+                    const foot = document.createElement('div');
+                    foot.style.width = "100%";
+                    foot.style.display = "flex";
+                    foot.style.justifyContent = "space-between";
                     card.className = 'recipe-card';
-                    card.innerHTML = `
+                    card_a.innerHTML = `
                             <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
                             <h2>${recipe.title}</h2>
                             <p>Category: ${recipe.category}</p>
                             <p>${recipe.cookingTime} minutes</p>
-                            <div style="width: 100%; display: flex; justify-content: space-between">
-                            <p>${recipe.createdAt}</p>
-</div>
                         `;
-                    card_a.appendChild(card);
-                    container.appendChild(card_a);
+                    foot.innerHTML = `
+                        <p>${recipe.createdAt}</p>
+                        <button class="posts-card" onclick="deleteRecipe('${recipe.id}')">
+                            <div></div>
+                        </button>
+                    `
+                    card.appendChild(card_a);
+                    card.appendChild(foot);
+                    container.appendChild(card);
                 });
                 if (count <=3)
                 {

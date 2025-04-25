@@ -175,7 +175,7 @@
                     card_a.href = `/recipes/${recipe.id}`;
                     const card = document.createElement('div');
                     card.className = 'recipe-card';
-                    card.innerHTML = `
+                    card_a.innerHTML = `
                             <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
                             <h2>${recipe.title}</h2>
                             <p>Category: ${recipe.category}</p>
@@ -185,8 +185,8 @@
                             <p>${recipe.createdAt}</p>
 </div>
                         `;
-                    card_a.appendChild(card);
-                    container.appendChild(card_a);
+                    card.appendChild(card_a);
+                    container.appendChild(card);
                 });
                 if (count <=3)
                 {

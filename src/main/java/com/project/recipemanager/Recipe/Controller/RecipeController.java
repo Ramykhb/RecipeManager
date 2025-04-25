@@ -1,5 +1,6 @@
 package com.project.recipemanager.Recipe.Controller;
 
+import com.project.recipemanager.Recipe.Model.Recipe;
 import com.project.recipemanager.Recipe.Repository.RecipeRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recipes")
@@ -26,11 +28,17 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String singleRecipes(HttpServletRequest request)
+    public String singleRecipes(HttpServletRequest request, @PathVariable String id)
     {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("sessionId") != null)
-            return "single-recipe";
+        {
+            Optional<Recipe> recipeOpt = recipeRepository.findById(id);
+            if (recipeOpt.isPresent())
+                return "single-recipe";
+            else
+                return "redirect:/users/login";
+        }
         return "redirect:/users/login";
     }
 
