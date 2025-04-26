@@ -7,6 +7,7 @@ import com.project.recipemanager.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -162,7 +163,6 @@ public class RecipeRestController {
 
     }
 
-
     @DeleteMapping("/favorites/{id}")
     public ResponseEntity<?> removeFromFavorites(@PathVariable String id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -176,4 +176,29 @@ public class RecipeRestController {
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/sortByTitleAsc")
+    public ResponseEntity<List<Recipe>> sortByTitleAsc() {
+        List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.ASC, "title"));
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/sortByTitleDesc")
+    public ResponseEntity<List<Recipe>> sortByTitleDesc() {
+        List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "title"));
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/sortByTimeAsc")
+    public ResponseEntity<List<Recipe>> sortByTimeAsc() {
+        List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
+        return ResponseEntity.ok(recipes);
+    }
+
+    @GetMapping("/sortByTimeDesc")
+    public ResponseEntity<List<Recipe>> sortByTimeDesc() {
+        List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        return ResponseEntity.ok(recipes);
+    }
+
 }

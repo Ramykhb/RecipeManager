@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Recipes</title>
+    <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -140,6 +141,74 @@
             display: block;
         }
 
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            gap: 5px;
+        }
+
+        #searchBarContainer {
+            position: relative;
+        }
+
+        #searchInput {
+            padding: 0.8em 1em 0.8em 2.5em;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            width: min(400px, 90vw);
+            outline: none;
+            background-color: #f8f8f8;
+            font-family: 'Oswald', sans-serif;
+            color: #333;
+        }
+
+        #searchBarContainer i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #888;
+            pointer-events: none;
+            font-size: 1.2em;
+        }
+
+        .filter-container {
+            position: relative;
+        }
+
+        .filter-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .filter-dropdown {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 180px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-left: 10px;
+        }
+
+        .filter-dropdown select {
+            padding: 0.5em;
+            font-size: 1em;
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
@@ -155,15 +224,43 @@
     <button onclick="logout()">Logout</button>
 </nav>
 <main>
-    <h1>All Recipes</h1>
+    <div class="top-bar">
+        <div id="searchBarContainer">
+            <input type="text" id="searchInput" placeholder="Search recipes..."
+                   onkeypress="handleKeyPress(event)">
+            <i class="fas fa-search"></i>
+        </div>
+
+        <div class="filter-container">
+            <button class="filter-button" onclick="toggleDropdown()">
+                <i class="fas fa-filter"></i>
+            </button>
+            <div id="dropdown" class="filter-dropdown">
+                <select id="sortOptions" onchange="fetchAndRenderRecipes()">
+                    <option value="">Sort By</option>
+                    <option value="titleAsc">Title ↑</option>
+                    <option value="titleDesc">Title ↓</option>
+                    <option value="timeAsc">Time ↑</option>
+                    <option value="timeDesc">Time ↓</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+
     <div id="container">
     </div>
 </main>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchAndRenderRecipes();
+        document.getElementById('sortOptions').addEventListener('change', fetchAndRenderRecipes);
+        document.getElementById('searchInput').addEventListener('input', fetchAndRenderRecipes); // live search
+    });
+
     function logout() {
-        fetch('/api/users/logout', {
-            method: 'POST'
-        })
+        fetch('/api/users/logout', { method: 'POST' })
             .then(response => {
                 if (response.ok) {
                     sessionStorage.clear();
@@ -172,9 +269,7 @@
                     console.error("Logout failed");
                 }
             })
-            .catch(error => {
-                console.error("Error during logout:", error);
-            });
+            .catch(error => console.error("Error during logout:", error));
     }
 
     function addToFavorites(recipeId) {
@@ -190,14 +285,40 @@
             .catch(err => alert(err.message));
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('/api/recipes')
+    function toggleDropdown() {
+        const dropdown = document.getElementById('dropdown');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function fetchAndRenderRecipes() {
+        const title = document.getElementById('searchInput').value.trim();
+        const sortOption = document.getElementById('sortOptions').value;
+        let url = '';
+
+        if (title) {
+            url = `/api/recipes/search?title=${encodeURIComponent(title)}`;
+            if (sortOption) url += `&sort=${sortOption}`;
+        } else {
+            url = '/api/recipes';
+            if (sortOption) {
+                switch (sortOption) {
+                    case 'titleAsc': url += '/sortByTitleAsc'; break;
+                    case 'titleDesc': url += '/sortByTitleDesc'; break;
+                    case 'timeAsc': url += '/sortByTimeAsc'; break;
+                    case 'timeDesc': url += '/sortByTimeDesc'; break;
+                }
+            }
+        }
+
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('container');
-                var count = 0;
+                container.innerHTML = '';
+                let count = 0;
+
                 data.forEach(recipe => {
-                    count+= 1;
+                    count++;
                     const card_a = document.createElement('a');
                     card_a.href = `/recipes/${recipe.id}`;
                     const card = document.createElement('div');
@@ -206,16 +327,18 @@
                     foot.style.display = "flex";
                     foot.style.justifyContent = "space-between";
                     card.className = 'recipe-card';
+
                     card_a.innerHTML = `
-                            <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
-                            <h2>${recipe.title}</h2>
-                            <p>Category: ${recipe.category}</p>
-                            <p>${recipe.cookingTime} minutes</p>
-                            <div style="width: 100%; display: flex; justify-content: space-between">
+                        <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
+                        <h2>${recipe.title}</h2>
+                        <p>Category: ${recipe.category}</p>
+                        <p>${recipe.cookingTime} minutes</p>
+                        <div style="width: 100%; display: flex; justify-content: space-between">
                             <p>Posted By: ${recipe.author}</p>
                             <p>${recipe.createdAt}</p>
-                            </div>
-                        `;
+                        </div>
+                    `;
+
                     foot.innerHTML = `
                         <div style="width: 2em; height: 2em;"></div>
                         <button class="posts-card" onclick="addToFavorites('${recipe.id}')">
@@ -226,28 +349,30 @@
                     card.appendChild(foot);
                     container.appendChild(card);
                 });
-                if (count <=3)
-                {
+
+                if (count <= 3) {
                     const body = document.getElementById("body");
                     body.style.height = "100vh";
                 }
-            });
-    });
+            })
+            .catch(error => console.error('Error fetching recipes:', error));
+    }
 
-    const button = document.getElementById('logout');
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
 
-    button.addEventListener('click', function (event) {
+    const logoutButton = document.getElementById('logout');
+    logoutButton.addEventListener('click', function (event) {
         event.preventDefault();
-        const jsonData = {};
-        fetch('/api/users/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ jsonData })
-        })
-        location.reload();
-    })
+        fetch('/api/users/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+            .then(() => location.reload());
+    });
 </script>
 
 </body>
