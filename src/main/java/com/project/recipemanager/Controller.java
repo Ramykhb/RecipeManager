@@ -1,18 +1,15 @@
 package com.project.recipemanager;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping()
 @org.springframework.stereotype.Controller
 public class Controller {
-//    @GetMapping("/images/**")
-//    public void images(){
-//        return;
-//    }
-//
-//    @GetMapping("/**")
-//    public String notfound(){
-//        return "redirect:/recipes";
-//    }
+    @RequestMapping(value = "/{path:[^\\.]+}")
+    public String redirect() {
+        return "redirect:/recipes";
+    }
+
 }
