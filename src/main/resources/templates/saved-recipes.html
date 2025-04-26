@@ -20,7 +20,7 @@
             padding: 2em;
         }
 
-        #favoritesContainer {
+        #container {
             width: 100%;
             display: flex;
             justify-content: space-around;
@@ -33,7 +33,7 @@
             font-family: "Oswald";
             width: 20em;
             border: 1px solid #939393;
-            height: 17em;
+            height: 18.7em;
             color: aliceblue;
             margin-bottom: 5em;
             border-radius: 10px;
@@ -67,6 +67,21 @@
             margin: 0.4em 1em;
             font-size: 0.8em;
             color: #d5d5d5;
+        }
+
+        .posts-card {
+            font-family: "Bebas Neue";
+            background-color: #ea800b;
+            margin-right: 0.5em;
+        }
+
+        .posts-card div {
+            background-image: url("/images/star-off.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 1em;
+            height: 1em;
         }
 
         h1 {
@@ -141,8 +156,7 @@
 </nav>
 <main>
     <h1>Saved Recipes</h1>
-    <div class="container" id="favoritesContainer">
-        <!-- Favorites will be inserted here -->
+    <div id="container">
     </div>
 </main>
 
@@ -155,44 +169,46 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('/api/recipes/favorites', { credentials: 'include' })
-            .then(res => {
-                if (!res.ok) throw new Error('Failed to fetch favorites');
-                return res.json();
-            })
-            .then(favorites => {
-                const container = document.getElementById('favoritesContainer');
-                container.innerHTML = '';
-
-                if (!Array.isArray(favorites) || favorites.length === 0) {
-                    container.innerHTML = `<div>No saved recipes found.</div>`;
-                } else {
-                    favorites.forEach(recipe => {
-                        const card = document.createElement('div');
-                        card.className = 'recipe-card';
-
-                        const card_a = document.createElement('a');
-                        card_a.href = `/recipes/${recipe.id}`;
-                        card_a.classList.add('recipe-link');
-                        card_a.innerHTML = `
-                            <div class="recipe-image" style="background-image: url('${recipe.imageURL || 'default-image.jpg'}');"></div>
+        fetch('/api/recipes/favorites')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('container');
+                var count = 0;
+                data.forEach(recipe => {
+                    count+= 1;
+                    const card_a = document.createElement('a');
+                    card_a.href = `/recipes/${recipe.id}`;
+                    const card = document.createElement('div');
+                    const foot = document.createElement('div');
+                    foot.style.width = "100%";
+                    foot.style.display = "flex";
+                    foot.style.justifyContent = "space-between";
+                    card.className = 'recipe-card';
+                    card_a.innerHTML = `
+                            <div class="recipe-image" style="background-image: url('${recipe.imageURL}');"></div>
                             <h2>${recipe.title}</h2>
                             <p>Category: ${recipe.category}</p>
                             <p>${recipe.cookingTime} minutes</p>
-                            <div class="button-container">
-                                <p>Posted By: ${recipe.author}</p>
-                                <button onclick="removeFromFavorites('${recipe.id}')">Remove</button>
+                            <div style="width: 100%; display: flex; justify-content: space-between">
+                            <p>Posted By: ${recipe.author}</p>
+                            <p>${recipe.createdAt}</p>
                             </div>
                         `;
-
-                        card.appendChild(card_a);
-                        container.appendChild(card);
-                    });
+                    foot.innerHTML = `
+                        <div style="width: 2em; height: 2em;"></div>
+                        <button class="posts-card" onclick="removeFromFavorites('${recipe.id}')">
+                            <div></div>
+                        </button>
+                    `;
+                    card.appendChild(card_a);
+                    card.appendChild(foot);
+                    container.appendChild(card);
+                });
+                if (count <=3)
+                {
+                    const body = document.getElementById("body");
+                    body.style.height = "100vh";
                 }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Error loading favorites. Please try again later.');
             });
     });
 

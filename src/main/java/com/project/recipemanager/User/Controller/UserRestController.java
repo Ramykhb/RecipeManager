@@ -62,7 +62,6 @@ public class UserRestController {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("sessionId") != null)
             session.invalidate();
-        System.out.println("HELLO");
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Logged out");
     }
 
