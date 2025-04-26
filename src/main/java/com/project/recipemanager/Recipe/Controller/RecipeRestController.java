@@ -67,7 +67,18 @@ public class RecipeRestController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Recipe>> searchByTitle(@RequestParam String title) {
-        return ResponseEntity.ok((List<Recipe>) recipeRepository.findByTitleContainingIgnoreCase(title));
+        List<Recipe> recipes = recipeRepository.findByTitleContainingIgnoreCase(title);
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
+        return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/my-posts")
@@ -180,24 +191,64 @@ public class RecipeRestController {
     @GetMapping("/sortByTitleAsc")
     public ResponseEntity<List<Recipe>> sortByTitleAsc() {
         List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.ASC, "title"));
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/sortByTitleDesc")
     public ResponseEntity<List<Recipe>> sortByTitleDesc() {
         List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "title"));
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/sortByTimeAsc")
     public ResponseEntity<List<Recipe>> sortByTimeAsc() {
         List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/sortByTimeDesc")
     public ResponseEntity<List<Recipe>> sortByTimeDesc() {
         List<Recipe> recipes = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        for (Recipe recipe : recipes)
+        {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+        }
         return ResponseEntity.ok(recipes);
     }
 

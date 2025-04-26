@@ -97,7 +97,7 @@
             color: white;
             font-family: "Bebas Neue";
             font-size: 1.3em;
-            margin-left: 4em;
+            margin-left: 1em;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
@@ -125,6 +125,7 @@
             width: 8em;
             height: auto;
             margin-left: 3.5em;
+            margin-right: 2.5em;
         }
 
         nav>ul {
@@ -179,6 +180,12 @@
             position: relative;
         }
 
+        option, select {
+            background-color: #333;
+            font-family: "Bebas Neue";
+            color: white;
+        }
+
         .filter-button {
             background-color: #333;
             color: white;
@@ -221,7 +228,10 @@
         <li><a href="/recipes/saved">FAVORITES</a></li>
         <li><a href="/recipes/my-posts">MY POSTS</a></li>
     </ul>
-    <button onclick="logout()">Logout</button>
+    <div>
+        <button onclick="navigateToNew()">NEW POST</button>
+        <button onclick="logout()">Logout</button>
+    </div>
 </nav>
 <main>
     <div class="top-bar">
@@ -240,8 +250,8 @@
                     <option value="">Sort By</option>
                     <option value="titleAsc">Title ↑</option>
                     <option value="titleDesc">Title ↓</option>
-                    <option value="timeAsc">Time ↑</option>
-                    <option value="timeDesc">Time ↓</option>
+                    <option value="timeAsc">Date ↑</option>
+                    <option value="timeDesc">Date ↓</option>
                 </select>
             </div>
 
@@ -256,8 +266,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         fetchAndRenderRecipes();
         document.getElementById('sortOptions').addEventListener('change', fetchAndRenderRecipes);
-        document.getElementById('searchInput').addEventListener('input', fetchAndRenderRecipes); // live search
+        document.getElementById('searchInput').addEventListener('input', fetchAndRenderRecipes);
     });
+
+    function navigateToNew() {
+        window.location.href = "/recipes/my-posts/new-post";
+    }
 
     function logout() {
         fetch('/api/users/logout', { method: 'POST' })
@@ -314,6 +328,8 @@
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('container');
+                const body = document.getElementById("body");
+                body.style.height = "auto";
                 container.innerHTML = '';
                 let count = 0;
 
