@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Recipes</title>
-    <script
-      src="https://kit.fontawesome.com/3d7cd03105.js"
-      crossorigin="anonymous"
-    ></script>
+    <link rel="stylesheet" th:href="@{/css/fonts.css}" />
     <style>
       * {
         margin: 0;
@@ -17,21 +14,22 @@
       body {
         font-size: 22px;
         background: radial-gradient(
-          circle at -60% -60%,
-          #ff9913,
-          #d07e1b,
-          #a2651e,
-          #764c1e,
-          #4d351b,
-          #271f17,
-          #131313,
-          #111111,
-          #0f0f0f,
-          #0d0d0d,
-          #0a0a0a,
-          #070707
+                circle at -60% -60%,
+                #ff9913,
+                #d07e1b,
+                #a2651e,
+                #764c1e,
+                #4d351b,
+                #271f17,
+                #131313,
+                #111111,
+                #0f0f0f,
+                #0d0d0d,
+                #0a0a0a,
+                #070707
         );
         height: auto;
+        width: 100%;
       }
 
       main {
@@ -110,10 +108,8 @@
       nav > ul > li {
         display: block;
       }
-    </style>
-    <link rel="stylesheet" th:href="@{/css/fonts.css}" />
-  </head>
-
+      </style>
+</head>
   <body id="body">
     <nav>
       <a href="/recipes"><img th:src="@{/images/logo.svg}" alt="logo" /></a>

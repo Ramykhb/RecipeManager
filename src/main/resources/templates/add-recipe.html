@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Recipe</title>
+    <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
     <style>
         * {
             padding: 0;
@@ -108,11 +109,37 @@
         span {
             color: red;
         }
-    </style>
+        .back-button {
+            width: 100px;
+            padding: 5px 5px;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .back-button:hover {
+            color: #f8a245;
+        }
+
+        .top-bar {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             padding: 10px 20px;
+             gap: 5px;
+         }
+
+        </style>
+        <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
 <body>
+<div class="top-bar"><button onclick="history.back()" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+</button>
+    <h1>Add a New Recipe</h1></div>
 <div id="container">
-    <h1>Add a New Recipe</h1>
     <form id="recipeForm">
         <label for="title">Recipe Title: <span>*</span></label>
         <input type="text" id="title" name="title" required />
@@ -121,11 +148,11 @@
         <textarea id="description" name="description" required></textarea>
 
         <label for="ingredients">Ingredients: <span>*</span></label>
-        <input type="text" id="ingredients" name="ingredients"/>
+        <input type="text" id="ingredients" name="ingredients" required/>
         <button id="ingredientsAdd">Add</button>
 
         <label for="instructions">Instructions: <span>*</span></label>
-        <input type="text" id="instructions" name="instructions"/>
+        <input type="text" id="instructions" name="instructions" required/>
         <button id="instructionsAdd">Add</button>
 
         <label for="cookingTime">Cooking Time (in minutes): <span>*</span></label>
@@ -134,8 +161,8 @@
         <label for="category">Category: <span>*</span></label>
         <input type="text" id="category" name="category" required />
 
-        <label for="imageURL">Image URL: <span>*</span></label>
-        <input type="text" id="imageURL" name="imageURL" required />
+        <label for="imageURL">Image URL: </label>
+        <input type="text" id="imageURL" name="imageURL"/>
 
         <button type="submit" id="submit">Add Recipe</button>
         <div class="message" id="message"></div>
@@ -178,7 +205,7 @@
 
     submitButton.addEventListener("click", async (e) => {
         e.preventDefault();
-        if (ingredientsCount == 0 || ingredientsCount == 0)
+        if (ingredientsCount == 0 || instructionsCount == 0)
         {
             alert('Please fill out all data...');
             return;
