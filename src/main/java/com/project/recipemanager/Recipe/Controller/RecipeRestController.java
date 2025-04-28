@@ -2,8 +2,10 @@ package com.project.recipemanager.Recipe.Controller;
 
 import com.project.recipemanager.Recipe.Model.Recipe;
 import com.project.recipemanager.Recipe.Repository.RecipeRepository;
+import com.project.recipemanager.Recipe.Service.RecipeService;
 import com.project.recipemanager.User.Model.User;
 import com.project.recipemanager.User.Repository.UserRepository;
+import com.project.recipemanager.User.Service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class RecipeRestController {
     @Autowired
     private UserRepository userRepository;
 
+    private final RecipeService recipeService;
+
+    @Autowired
+    public RecipeRestController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Recipe>> getRecipes()
@@ -58,9 +66,7 @@ public class RecipeRestController {
         String formattedDate = now.format(dateFormatter);
         recipe.setCreatedAt(formattedDate);
         recipe.setAuthor(session.getAttribute("sessionId").toString());
-        if (recipe.getImageURL() == null || recipe.getImageURL().equals("")){
-            recipe.setImageURL("https://www.cezarskitchen.com.my/wp-content/themes/consultix/images/no-image-found-360x250.png");
-        }
+        recipe.setImageURL(recipeService.checkURL(recipe.getImageURL(), "https://www.cezarskitchen.com.my/wp-content/themes/consultix/images/no-image-found-360x250.png"));
         recipeRepository.save(recipe);
         return ResponseEntity.ok().build();
     }
@@ -125,6 +131,25 @@ public class RecipeRestController {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can only delete your own recipes.");
+    }
+
+    @GetMapping ("/{id}")
+    public ResponseEntity<?> singleRecipe(@PathVariable String id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("sessionId") == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        Recipe recipe = recipeRepository.findById(id).orElse(null);
+        if (recipe != null) {
+            Optional<User> userOptional = userRepository.findById(recipe.getAuthor());
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                recipe.setAuthor(user.getUsername());}
+            else {
+                recipe.setAuthor("Null");
+            }
+            return ResponseEntity.ok(recipe);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Recipe not found.");
     }
 
     @PostMapping("/favorites/{id}")
