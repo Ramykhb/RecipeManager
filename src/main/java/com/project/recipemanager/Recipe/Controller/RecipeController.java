@@ -2,6 +2,8 @@ package com.project.recipemanager.Recipe.Controller;
 
 import com.project.recipemanager.Recipe.Model.Recipe;
 import com.project.recipemanager.Recipe.Repository.RecipeRepository;
+import com.project.recipemanager.User.Model.User;
+import com.project.recipemanager.User.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,20 @@ public class RecipeController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping()
     public String allRecipes(HttpServletRequest request)
     {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("sessionId") != null)
+        {
+            User user = userRepository.findById(session.getAttribute("sessionId").toString()).orElse(null);
+            if (user.isAdmin())
+                return "all-recipes-admin";
             return "all-recipes";
+        }
         return "redirect:/users/login";
     }
 

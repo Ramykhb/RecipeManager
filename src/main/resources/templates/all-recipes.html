@@ -287,16 +287,35 @@
     }
 
     function addToFavorites(recipeId) {
-        fetch('/api/users/favorites/add', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ recipeId })
-        })
-            .then(res => {
-                if (res.ok) alert("Added to favorites!");
-                else throw new Error("Failed to add to favorites.");
+        const button = document.getElementById(recipeId);
+        if (window.getComputedStyle(button).backgroundImage.includes("star.svg"))
+        {
+            button.style.backgroundImage = 'url("/images/star-off.svg")';
+            fetch('/api/users/favorites/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recipeId })
             })
-            .catch(err => alert(err.message));
+                .then(res => {
+                    if (res.ok) alert("Added to favorites!");
+                    else throw new Error("Failed to add to favorites.");
+                })
+                .catch(err => alert(err.message));
+        }
+        else {
+            if (confirm("Are you sure you want to remove this recipe?")) {
+                button.style.backgroundImage = 'url("/images/star.svg")';
+                fetch(`/api/recipes/favorites/${recipeId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            console.log("success");
+                        } else alert("Failed to remove favorite");
+                    });
+            }
+        }
     }
 
     function toggleDropdown() {
@@ -358,7 +377,7 @@
                     foot.innerHTML = `
                         <div style="width: 2em; height: 2em;"></div>
                         <button class="posts-card" onclick="addToFavorites('${recipe.id}')">
-                            <div></div>
+                            <div id='${recipe.id}'></div>
                         </button>
                     `;
                     card.appendChild(card_a);

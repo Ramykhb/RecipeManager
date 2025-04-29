@@ -125,7 +125,8 @@ public class RecipeRestController {
         if (session == null || session.getAttribute("sessionId") == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Recipe recipe = recipeRepository.findById(id).orElse(null);
-        if (recipe != null && recipe.getAuthor().equals(session.getAttribute("sessionId").toString())) {
+        User user = userRepository.findById(session.getAttribute("sessionId").toString()).orElse(null);
+        if (recipe != null && (recipe.getAuthor().equals(user.getId()) || user.isAdmin())) {
             recipeRepository.deleteById(id);
             return ResponseEntity.ok().build();
         }
@@ -204,7 +205,6 @@ public class RecipeRestController {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("sessionId") == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
         String userId = session.getAttribute("sessionId").toString();
         return userRepository.findById(userId).map(user -> {
             user.getFavorites().remove(id);
