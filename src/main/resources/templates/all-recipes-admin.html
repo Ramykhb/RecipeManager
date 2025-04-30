@@ -226,6 +226,29 @@
       width: 100%;
     }
 
+    @media screen and (max-width: 1050px){
+      nav {
+        font-size: 0.7em;
+        padding: 2.5em 0.2em 1em 0.2em;
+        align-items: center;
+        justify-content: center;
+      }
+
+
+
+      nav ul {
+        margin-left: 0;
+        margin-right: 0;
+        width: 70%;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      nav > div {
+        align-self: center;
+      }
+    }
+
     @media screen and (max-width: 750px) {
       .recipe-card {
         font-size: 1.2em;
@@ -266,6 +289,10 @@
       nav > div {
         align-self: center;
         margin-top: 2em;
+      }
+
+      .top-bar {
+        margin-top: 1.5em;
       }
 
       body {

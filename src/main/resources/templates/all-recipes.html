@@ -219,6 +219,29 @@
             width: 100%;
         }
 
+        @media screen and (max-width: 1050px){
+            nav {
+                font-size: 0.7em;
+                padding: 2.5em 0.2em 1em 0.2em;
+                align-items: center;
+                justify-content: center;
+            }
+
+
+
+            nav ul {
+                margin-left: 0;
+                margin-right: 0;
+                width: 70%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            nav > div {
+                align-self: center;
+            }
+        }
+
         @media screen and (max-width: 750px) {
             .recipe-card {
                 font-size: 1.2em;
@@ -261,6 +284,10 @@
                 margin-top: 2em;
             }
 
+            .top-bar {
+                margin-top: 1.5em;
+            }
+
             body {
                 font-size: 18px;
             }
@@ -271,6 +298,22 @@
 
             #container {
                 padding: 1em 1.5em;
+            }
+
+            .filter-dropdown {
+                top: 150% !important;
+                left: unset;
+                width: 85%;
+                right: 50%;
+            }
+
+            .filter-dropdown select {
+                font-size: 0.8em;
+                width: 100%;
+            }
+
+            .filter-dropdown option {
+                font-size: 0.8em;
             }
         }
     </style>

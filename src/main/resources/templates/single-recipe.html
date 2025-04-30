@@ -111,6 +111,29 @@
         display: block;
       }
 
+      @media screen and (max-width: 1050px){
+        nav {
+          font-size: 0.7em;
+          padding: 2.5em 0.2em 1em 0.2em;
+          align-items: center;
+          justify-content: center;
+        }
+
+
+
+        nav ul {
+          margin-left: 0;
+          margin-right: 0;
+          width: 70%;
+          display: flex;
+          justify-content: space-around;
+        }
+
+        nav > div {
+          align-self: center;
+        }
+      }
+
       @media screen and (max-width: 750px) {
         .recipe-card {
           font-size: 1.2em;
@@ -165,10 +188,16 @@
         h1 {
           text-align: center;
           margin-left: 0;
+          font-size: 3em;
+          margin-top: 1em;
         }
 
         #container > div {
           width: 100% !important;
+        }
+
+        #container > div:nth-child(1) {
+          max-height: 20em;
         }
 
         #container > div:nth-child(2) {

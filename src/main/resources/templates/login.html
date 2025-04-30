@@ -104,7 +104,7 @@
         }
 
         button {
-            margin-top: 3.125em;
+            margin-top: 1.5em;
             width: 100%;
             background-color: #ffffff;
             color: #080710;
@@ -195,7 +195,7 @@
             }
 
             button {
-                margin-top: 2.5em;
+                margin-top: 1.25em;
                 font-size: 0.9375em;
                 padding: 0.75em 0;
             }
@@ -221,6 +221,7 @@
 
     <label for="password">Password</label>
     <input type="password" placeholder="Password" id="password" name="password">
+    <p id="error" style="color: #ec3737; margin-top: 1.25em; display: none">Invalid Credentials, Please Try Again.</p>
     <button>Log In</button>
     <h4>Don't have an account? <a href="/users/signup">Signup.</a> </h4>
 </form>
@@ -250,7 +251,8 @@
                     if (response.ok) {
                         window.location.href = "/recipes";
                     } else {
-                        alert("Invalid credentials. Please try again.");
+                        const error = document.getElementById('error');
+                        error.style.display = "block";
                     }
                 })
                 .catch((error) => {
