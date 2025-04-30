@@ -97,7 +97,7 @@ public class RecipeRestController {
         return ResponseEntity.ok((List<Recipe>) recipeRepository.findByAuthor(userId));
     }
 
-    @PutMapping("my-posts/edit-post/{id}")
+    @PutMapping("my-posts/{id}")
     public ResponseEntity<?> editRecipe(@PathVariable String id, @RequestBody Recipe updatedRecipe, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("sessionId") == null)

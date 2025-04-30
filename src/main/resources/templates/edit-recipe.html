@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Add Recipe</title>
     <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * {
             padding: 0;
@@ -15,11 +16,13 @@
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
             padding: 30px;
+            min-height: 100vh;
         }
 
         #container {
-            width: 60%;
-            margin: auto;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
         }
 
@@ -110,6 +113,16 @@
             gap: 5px;
         }
 
+        @media screen and (max-width: 750px) {
+            body {
+                font-size: 18px;
+            }
+
+            #recipeForm {
+                width: 90%;
+            }
+        }
+
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
@@ -119,7 +132,7 @@
 </button>
     <h1>Edit Recipe</h1></div>
 <div id="container">
-<form id="editRecipeForm">
+<form id="recipeForm">
     <label for="title">Recipe Title: <span>*</span></label>
     <input type="text" id="title" name="title" required />
 
@@ -190,7 +203,7 @@
         };
 
         try {
-            const response = await fetch(`/api/recipes/my-posts/edit-post/${recipeId}`, {
+            const response = await fetch(`/api/recipes/my-posts/${recipeId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

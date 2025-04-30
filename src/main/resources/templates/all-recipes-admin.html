@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Recipes</title>
   <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     * {
       margin: 0;
@@ -122,14 +123,14 @@
       width: 100%;
       height: 15vh;
       display: flex;
+      flex-wrap: wrap;
       padding: 2em 3em;
       justify-content: space-between;
       align-items: center;
       text-transform: uppercase;
     }
 
-    nav img,
-    footer img {
+    nav img{
       width: 8em;
       height: auto;
       margin-left: 3.5em;
@@ -167,7 +168,7 @@
       font-size: 1em;
       border: 1px solid #ccc;
       border-radius: 30px;
-      width: min(400px, 90vw);
+      width: 18em;
       outline: none;
       background-color: #f8f8f8;
       font-family: 'Oswald', sans-serif;
@@ -214,7 +215,7 @@
       background-color: #fff;
       border: 1px solid #ccc;
       border-radius: 8px;
-      width: 180px;
+      width: 8em;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       margin-left: 10px;
     }
@@ -224,6 +225,73 @@
       font-size: 1em;
       width: 100%;
     }
+
+    @media screen and (max-width: 750px) {
+      .recipe-card {
+        font-size: 1.2em;
+        height: auto;
+        width: 25em;
+        margin-bottom: 1em;
+      }
+
+      .posts-card {
+        margin-bottom: 1em;
+      }
+
+      nav {
+        font-size: 0.7em;
+        padding: 2.5em 0.2em 1em 0.2em;
+        align-items: center;
+        justify-content: center;
+      }
+
+      nav a {
+        width: 30%;
+      }
+
+      nav img{
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      nav ul {
+        margin-left: 0;
+        margin-right: 0;
+        width: 70%;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      nav > div {
+        align-self: center;
+        margin-top: 2em;
+      }
+
+      body {
+        font-size: 18px;
+      }
+
+      #searchInput {
+        width: 16em;
+      }
+
+      #searchBarContainer, .filter-container {
+        font-size: 0.9em;
+      }
+
+      .filter-container {
+        width: auto;
+        display: flex !important;
+        flex-wrap: wrap;
+        flex-direction: column;
+      }
+
+      #container {
+        padding: 1em 1.5em;
+      }
+    }
+
   </style>
   <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
@@ -303,26 +371,16 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipeId })
       })
-              .then(res => {
-                if (res.ok) alert("Added to favorites!");
-                else throw new Error("Failed to add to favorites.");
-              })
-              .catch(err => alert(err.message));
     }
     else {
-      if (confirm("Are you sure you want to remove this recipe?")) {
+
         button.style.backgroundImage = 'url("/images/star.svg")';
         fetch(`/api/recipes/favorites/${recipeId}`, {
           method: 'DELETE',
           credentials: 'include'
         })
-                .then(res => {
-                  if (res.ok) {
-                    console.log("success");
-                  } else alert("Failed to remove favorite");
-                });
       }
-    }
+
     }
 
 
@@ -352,9 +410,13 @@
     let url = '';
 
     if (title) {
+      if (sortOption) {
+        sortOption.value = "";
+      }
+      document.querySelector('.filter-container').style.display = 'none';
       url = `/api/recipes/search?title=${encodeURIComponent(title)}`;
-      if (sortOption) url += `&sort=${sortOption}`;
     } else {
+      document.querySelector('.filter-container').style.display = 'block';
       url = '/api/recipes';
       if (sortOption) {
         switch (sortOption) {

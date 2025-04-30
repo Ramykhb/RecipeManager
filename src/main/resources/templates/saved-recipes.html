@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Saved Recipes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * {
             margin: 0;
@@ -47,7 +48,6 @@
             border-top-right-radius: 10px;
             width: 100%;
             height: 7.5em;
-            background-image: url("https://www.foodandwine.com/thmb/Wd4lBRZz3X_8qBr69UOu2m7I2iw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/classic-cheese-pizza-FT-RECIPE0422-31a2c938fc2546c9a07b7011658cfd05.jpg");
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -115,6 +115,7 @@
             width: 100%;
             height: 15vh;
             display: flex;
+            flex-wrap: wrap;
             padding: 2em 3em;
             justify-content: space-between;
             align-items: center;
@@ -142,6 +143,57 @@
             display: block;
         }
 
+        @media screen and (max-width: 750px) {
+            .recipe-card {
+                font-size: 1.2em;
+                height: auto;
+                width: 25em;
+                margin-bottom: 1em;
+            }
+
+            .posts-card {
+                margin-bottom: 1em;
+            }
+
+            nav {
+                font-size: 0.7em;
+                padding: 2.5em 0.2em 1em 0.2em;
+                align-items: center;
+                justify-content: center;
+            }
+
+            nav a {
+                width: 30%;
+            }
+
+            nav img{
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            nav ul {
+                margin-left: 0;
+                margin-right: 0;
+                width: 70%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            nav > div {
+                align-self: center;
+                margin-top: 2em;
+            }
+
+            body {
+                font-size: 18px;
+            }
+
+            #container {
+                padding: 1em 1.5em;
+            }
+        }
+
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
@@ -156,7 +208,7 @@
     </ul>
     <div>
         <button onclick="navigateToNew()">NEW POST</button>
-        <button id="logout">Logout</button>
+        <button onclick="logout()" id="logout">Logout</button>
     </div>
 </nav>
 <main>
@@ -216,17 +268,10 @@
     });
 
     function removeFromFavorites(recipeId) {
-        if (confirm("Are you sure you want to remove this recipe?")) {
             fetch(`/api/recipes/favorites/${recipeId}`, {
                 method: 'DELETE',
                 credentials: 'include'
             })
-                .then(res => {
-                    if (res.ok) {
-                        location.reload();
-                    } else alert("Failed to remove favorite");
-                });
-        }
     }
 </script>
 </body>

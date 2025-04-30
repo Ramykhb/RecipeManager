@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Recipes</title>
     <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * {
             margin: 0;
@@ -115,6 +116,7 @@
             height: 15vh;
             display: flex;
             padding: 2em 3em;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             text-transform: uppercase;
@@ -159,7 +161,7 @@
             font-size: 1em;
             border: 1px solid #ccc;
             border-radius: 30px;
-            width: min(400px, 90vw);
+            width: 18em;
             outline: none;
             background-color: #f8f8f8;
             font-family: 'Oswald', sans-serif;
@@ -215,6 +217,61 @@
             padding: 0.5em;
             font-size: 1em;
             width: 100%;
+        }
+
+        @media screen and (max-width: 750px) {
+            .recipe-card {
+                font-size: 1.2em;
+                height: auto;
+                width: 25em;
+                margin-bottom: 1em;
+            }
+
+            .posts-card {
+                margin-bottom: 1em;
+            }
+
+            nav {
+                font-size: 0.7em;
+                padding: 2.5em 0.2em 1em 0.2em;
+                align-items: center;
+                justify-content: center;
+            }
+
+            nav a {
+                width: 30%;
+            }
+
+            nav img{
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            nav ul {
+                margin-left: 0;
+                margin-right: 0;
+                width: 70%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            nav > div {
+                align-self: center;
+                margin-top: 2em;
+            }
+
+            body {
+                font-size: 18px;
+            }
+
+            #searchInput {
+                width: 16em;
+            }
+
+            #container {
+                padding: 1em 1.5em;
+            }
         }
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
@@ -296,10 +353,6 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ recipeId })
             })
-                .then(res => {
-                    if (!res.ok)throw new Error("Failed to add to favorites.");
-                })
-                .catch(err => alert(err.message));
         }
         else {
                 button.style.backgroundImage = 'url("/images/star.svg")';
@@ -307,11 +360,6 @@
                     method: 'DELETE',
                     credentials: 'include'
                 })
-                    .then(res => {
-                        if (res.ok) {
-                            console.log("success");
-                        } else alert("Failed to remove favorite");
-                    });
         }
     }
 

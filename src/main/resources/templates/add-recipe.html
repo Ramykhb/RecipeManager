@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Add Recipe</title>
     <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * {
             padding: 0;
@@ -12,9 +13,10 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
             padding: 30px;
+            min-height: 100vh;
+            font-size: 22px;
+            background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
         }
 
         #container {
@@ -22,11 +24,6 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-        }
-
-        body {
-            font-size: 22px;
-            background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
         }
 
 
@@ -130,6 +127,16 @@
              padding: 10px 20px;
              gap: 5px;
          }
+
+        @media screen and (max-width: 750px) {
+            body {
+                font-size: 18px;
+            }
+
+            #recipeForm {
+                width: 90%;
+            }
+        }
 
         </style>
         <link rel="stylesheet" th:href="@{/css/fonts.css}">

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>My Recipes</title>
     <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         * {
             margin: 0;
@@ -93,12 +94,12 @@
 
         .posts-card {
             font-family: "Bebas Neue";
-            background-color: #ed5c5c;
+            background-color: #ea800b;
             margin-right: 0.5em;
         }
 
         .posts-card div {
-            background-image: url("/images/trash.svg");
+            background-image: url("/images/edit.svg");
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -106,13 +107,14 @@
             height: 1em;
         }
 
-        .edit-card {
-            background-color: #ea800b;
+        .delete-card {
+            background-color: #ed5c5c;
         }
 
-        .edit-card div {
-            background-image: url("/images/edit.svg");
+        .delete-card div{
+            background-image: url("/images/trash.svg");
         }
+
 
         button:hover,#edit:hover {
             background-color: #f8a245;
@@ -124,6 +126,7 @@
             width: 100%;
             height: 15vh;
             display: flex;
+            flex-wrap: wrap;
             padding: 2em 3em;
             justify-content: space-between;
             align-items: center;
@@ -152,6 +155,70 @@
             display: block;
         }
 
+        @media screen and (max-width: 750px) {
+            .recipe-card {
+                font-size: 1.2em;
+                height: auto;
+                width: 25em;
+                margin-bottom: 1em;
+            }
+
+            .posts-card {
+                margin-bottom: 1em;
+            }
+
+            nav {
+                font-size: 0.7em;
+                padding: 2.5em 0.2em 1em 0.2em;
+                align-items: center;
+                justify-content: center;
+            }
+
+            nav a {
+                width: 30%;
+            }
+
+            nav img{
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            nav ul {
+                margin-left: 0;
+                margin-right: 0;
+                width: 70%;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            nav > div {
+                align-self: center;
+                margin-top: 2em;
+            }
+
+            body {
+                font-size: 18px;
+            }
+
+            #container {
+                padding: 1em 1.5em;
+            }
+
+            .delete-card {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .recipe-card > div > div {
+                display: flex;
+            }
+
+            .posts-card {
+                margin-left: 0.3em;
+            }
+        }
+
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
@@ -166,7 +233,7 @@
     </ul>
     <div>
         <button onclick="navigateToNew()">NEW POST</button>
-        <button id="logout">Logout</button>
+        <button onclick="logout()" id="logout">Logout</button>
     </div>
 </nav>
 <main>
@@ -195,7 +262,7 @@
     }
 
     function editRecipe(id) {
-        window.location.href = `/recipes/my-posts/edit-post/${id}`;
+        window.location.href = `/recipes/my-posts/${id}`;
     }
 
 
@@ -207,7 +274,7 @@
                 var count = 0;
                 data.forEach(recipe => {
                     const card_a = document.createElement('a');
-                    card_a.href = `/recipes/my-posts/${recipe.id}`;
+                    card_a.href = `/recipes/${recipe.id}`;
                     const card = document.createElement('div');
                     const foot = document.createElement('div');
                     foot.style.width = "100%";
@@ -223,10 +290,10 @@
                     foot.innerHTML = `
                         <p>${recipe.createdAt}</p>
                         <div>
-                        <button class="posts-card edit-card" id="edit" onclick="editRecipe('${recipe.id}')">
+                         <button class="posts-card delete-card" onclick="deleteRecipe('${recipe.id}')" style="margin-left: 0.5em">
                             <div></div>
                         </button>
-                        <button class="posts-card" onclick="deleteRecipe('${recipe.id}')" style="margin-left: 0.5em">
+                        <button class="posts-card" id="edit" onclick="editRecipe('${recipe.id}')">
                             <div></div>
                         </button>
 </div>
