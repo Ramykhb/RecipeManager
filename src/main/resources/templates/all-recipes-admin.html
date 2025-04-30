@@ -372,11 +372,10 @@
               const container = document.getElementById('container');
               const body = document.getElementById("body");
               body.style.height = "auto";
+              body.style.minHeight = "100vh";
               container.innerHTML = '';
-              let count = 0;
 
               data.forEach(recipe => {
-                count++;
                 const card_a = document.createElement('a');
                 card_a.href = `/recipes/${recipe.id}`;
                 const card = document.createElement('div');
@@ -413,10 +412,6 @@
                 container.appendChild(card);
               });
 
-              if (count <= 3) {
-                const body = document.getElementById("body");
-                body.style.height = "100vh";
-              }
             })
             .catch(error => console.error('Error fetching recipes:', error));
   }

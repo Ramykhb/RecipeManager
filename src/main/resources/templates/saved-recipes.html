@@ -12,6 +12,8 @@
 
         body {
             font-size: 22px;
+            min-height: 100vh;
+            height: auto;
             background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
         }
 
@@ -173,9 +175,7 @@
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('container');
-                var count = 0;
                 data.forEach(recipe => {
-                    count+= 1;
                     const card_a = document.createElement('a');
                     card_a.href = `/recipes/${recipe.id}`;
                     const card = document.createElement('div');
@@ -204,11 +204,6 @@
                     card.appendChild(foot);
                     container.appendChild(card);
                 });
-                if (count <=3)
-                {
-                    const body = document.getElementById("body");
-                    body.style.height = "100vh";
-                }
             });
     });
 
