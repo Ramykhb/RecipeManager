@@ -12,4 +12,9 @@ public class Controller {
         return "redirect:/recipes";
     }
 
+    @RequestMapping(value = "/")
+    public String Home() {
+        return "redirect:/recipes";
+    }
+
 }

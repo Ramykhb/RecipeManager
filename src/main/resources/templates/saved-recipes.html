@@ -98,7 +98,7 @@
             color: white;
             font-family: "Bebas Neue";
             font-size: 1.3em;
-            margin-left: 4em;
+            margin-left: 1em;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
@@ -154,7 +154,10 @@
         <li><a href="/recipes/saved">FAVORITES</a></li>
         <li><a href="/recipes/my-posts">MY POSTS</a></li>
     </ul>
-    <button onclick="logout()">Logout</button>
+    <div>
+        <button onclick="navigateToNew()">NEW POST</button>
+        <button id="logout">Logout</button>
+    </div>
 </nav>
 <main>
     <h1>Saved Recipes</h1>
@@ -163,6 +166,11 @@
 </main>
 
 <script>
+
+    function navigateToNew() {
+        window.location.href = "/recipes/my-posts/new-post";
+    }
+
     function logout() {
         fetch('/api/users/logout', {
             method: 'POST',

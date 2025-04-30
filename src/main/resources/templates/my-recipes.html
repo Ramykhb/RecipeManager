@@ -97,10 +97,6 @@
             margin-right: 0.5em;
         }
 
-        #edit{
-            background-color: #ea800b;
-        }
-
         .posts-card div {
             background-image: url("/images/trash.svg");
             background-repeat: no-repeat;
@@ -108,6 +104,14 @@
             background-size: cover;
             width: 1em;
             height: 1em;
+        }
+
+        .edit-card {
+            background-color: #ea800b;
+        }
+
+        .edit-card div {
+            background-image: url("/images/edit.svg");
         }
 
         button:hover,#edit:hover {
@@ -218,13 +222,14 @@
                         `;
                     foot.innerHTML = `
                         <p>${recipe.createdAt}</p>
-                        <button class="posts-card" id="edit" onclick="editRecipe('${recipe.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-
-                        <button class="posts-card" onclick="deleteRecipe('${recipe.id}')">
+                        <div>
+                        <button class="posts-card edit-card" id="edit" onclick="editRecipe('${recipe.id}')">
                             <div></div>
                         </button>
+                        <button class="posts-card" onclick="deleteRecipe('${recipe.id}')" style="margin-left: 0.5em">
+                            <div></div>
+                        </button>
+</div>
                     `;
                     card.appendChild(card_a);
                     card.appendChild(foot);
