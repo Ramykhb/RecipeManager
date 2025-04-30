@@ -37,7 +37,7 @@ public class RecipeController {
         return "redirect:/users/login";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping({"/{id}", "/my-posts/{id}"})
     public String singleRecipes(HttpServletRequest request, @PathVariable String id)
     {
         HttpSession session = request.getSession(false);
@@ -72,21 +72,21 @@ public class RecipeController {
         return "my-recipes";
     }
 
-    @GetMapping("/my-posts/{id}")
-    public String editRecipe(HttpServletRequest request)
-    {
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("sessionId") != null)
-            return "edit-recipe";
-        return "redirect:/users/login";
-    }
-
     @GetMapping("/my-posts/new-post")
     public String addRecipes(HttpServletRequest request)
     {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("sessionId") != null)
             return "add-recipe";
+        return "redirect:/users/login";
+    }
+
+    @GetMapping("/my-posts/edit-post/{id}")
+    public String editRecipes(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("sessionId") != null)
+            return "edit-recipe";
         return "redirect:/users/login";
     }
 }

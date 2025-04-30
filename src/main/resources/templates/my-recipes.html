@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My Recipes</title>
+    <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -96,6 +97,10 @@
             margin-right: 0.5em;
         }
 
+        #edit{
+            background-color: #ea800b;
+        }
+
         .posts-card div {
             background-image: url("/images/trash.svg");
             background-repeat: no-repeat;
@@ -105,7 +110,7 @@
             height: 1em;
         }
 
-        button:hover {
+        button:hover,#edit:hover {
             background-color: #f8a245;
         }
 
@@ -185,6 +190,10 @@
         }
     }
 
+    function editRecipe(id) {
+        window.location.href = `/recipes/my-posts/edit-post/${id}`;
+    }
+
 
     document.addEventListener('DOMContentLoaded', function () {
         fetch('/api/recipes/my-posts')
@@ -209,6 +218,10 @@
                         `;
                     foot.innerHTML = `
                         <p>${recipe.createdAt}</p>
+                        <button class="posts-card" id="edit" onclick="editRecipe('${recipe.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
                         <button class="posts-card" onclick="deleteRecipe('${recipe.id}')">
                             <div></div>
                         </button>

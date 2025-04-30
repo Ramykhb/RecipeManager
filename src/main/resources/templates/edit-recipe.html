@@ -2,95 +2,215 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>Add Recipe</title>
+    <script src="https://kit.fontawesome.com/3d7cd03105.js" crossorigin="anonymous"></script>
     <style>
         * {
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
             padding: 0;
+            margin: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: #fafafa;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            padding: 30px;
+        }
+
+        #container {
+            width: 60%;
+            margin: auto;
+            justify-content: center;
+        }
+
+        body {
+            font-size: 22px;
+            background: radial-gradient(circle at -60% -60%, #ff9913, #d07e1b, #a2651e, #764c1e, #4d351b, #271f17, #131313, #111111, #0f0f0f, #0d0d0d, #0a0a0a, #070707);
+        }
+
+
+        #recipeForm {
+            width: 50%;
+            height: auto;
+            padding-top: 0.5em;
+            margin-bottom: 2em;
+        }
+
+        h3,
+        label {
+            color: #ffffff;
+            font-family: Bebas Neue, Verdana, sans-serif;
+            font-weight: 500;
+            margin-bottom: 0.3em;
+            margin-top: 0.5em;
+            margin-right: 50%;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
+            width: 100%;
+            font-family: "Bebas Neue";
+            color: #ffffff;
         }
 
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-container input {
-            flex: 1;
-            padding: 10px 15px;
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
         }
 
-        .search-container button {
-            padding: 10px 20px;
-            background-color: #ff5252;
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ea800b;
+            font-family: "Bebas Neue";
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
+            font-size: 20px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        .search-container button:hover {
-            background-color: #ff1e1e;
+        button:hover {
+            background-color: #fb9a2e;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        a {
-            text-decoration: none;
-            margin: 10px;
-        }
-
-        a p {
-            background-color: #007BFF;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            width: 200px;
+        .message {
+            margin-top: 15px;
             text-align: center;
-            transition: background-color 0.3s;
         }
 
-        a p:hover {
-            background-color: #0056b3;
+        span {
+            color: red;
+        }
+        .back-button {
+            width: 100px;
+            padding: 5px 5px;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .back-button:hover {
+            color: #f8a245;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            gap: 5px;
         }
 
     </style>
     <link rel="stylesheet" th:href="@{/css/fonts.css}">
 </head>
 <body>
-    <h1>Search Recipes</h1>
+<div class="top-bar"><button onclick="history.back()" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+</button>
+    <h1>Edit Recipe</h1></div>
+<div id="container">
+<form id="editRecipeForm">
+    <label for="title">Recipe Title: <span>*</span></label>
+    <input type="text" id="title" name="title" required />
 
-    <div class="search-container">
-        <label for="searchInput"></label>
-        <input type="text" id="searchInput" placeholder="Search by recipe name...">
-        <button>Search</button>
-    </div>
+    <label for="description">Description: <span>*</span></label>
+    <textarea id="description" name="description" required></textarea>
+    <label for="ingredients">Ingredients: <span>*</span></label>
+    <input type="text" id="ingredients" name="ingredients" placeholder="Enter ingredients separated by commas" required/>
+    <label for="instructions">Instructions: <span>*</span></label>
+    <input type="text" id="instructions" name="instructions" placeholder="Enter instructions separated by commas" required/>
+    <label for="cookingTime">Cooking Time (in minutes): <span>*</span></label>
+    <input type="text" id="cookingTime" name="cookingTime" required />
 
-    <h1>User Management</h1>
+    <label for="category">Category: <span>*</span></label>
+    <input type="text" id="category" name="category" required />
 
-    <div>
-        <a href="all-recipes.html"><p>Show All Recipe</p></a>
-        <a href="add-recipe.html"><p>Add a Recipe</p></a>
-    </div>
+    <label for="imageURL">Image URL: </label>
+    <input type="text" id="imageURL" name="imageURL"/>
+
+    <button type="submit" id="submit">Update Recipe</button>
+</form></div>
+
+<script>
+    const recipeId = window.location.pathname.split("/").pop();
+    const submitButton = document.getElementById("submit");
+
+    window.onload = async () => {
+        try {
+            const response = await fetch(`/api/recipes/${recipeId}`);
+            if (!response.ok) {
+                alert("❌ Failed to fetch recipe.");
+                return;
+            }
+
+            const recipe = await response.json();
+
+            document.getElementById("title").value = recipe.title;
+            document.getElementById("description").value = recipe.description;
+            document.getElementById("ingredients").value = recipe.ingredients.join(', ');
+            document.getElementById("instructions").value = recipe.instructions.join(', ');
+            document.getElementById("cookingTime").value = recipe.cookingTime;
+            document.getElementById("category").value = recipe.category;
+            document.getElementById("imageURL").value = recipe.imageURL || '';
+        } catch (error) {
+            console.error("Fetch error:", error);
+            alert("⚠️ Unable to load recipe data.");
+        }
+    };
+
+    submitButton.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const ingredientsInput = document.getElementById("ingredients").value.trim();
+        const instructionsInput = document.getElementById("instructions").value.trim();
+
+        if (!ingredientsInput || !instructionsInput) {
+            alert('Please fill out all data...');
+            return;
+        }
+
+        const recipe = {
+            title: document.getElementById("title").value,
+            description: document.getElementById("description").value,
+            ingredients: ingredientsInput.split(',').map(i => i.trim()),
+            instructions: instructionsInput.split(',').map(i => i.trim()),
+            cookingTime: document.getElementById("cookingTime").value,
+            category: document.getElementById("category").value,
+            imageURL: document.getElementById("imageURL").value
+        };
+
+        try {
+            const response = await fetch(`/api/recipes/my-posts/edit-post/${recipeId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(recipe)
+            });
+
+            if (response.ok) {
+                alert('✅ Recipe updated successfully!');
+                window.location.href = `/recipes/my-posts/${recipeId}`;
+            } else {
+                alert("❌ Failed to update recipe.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("⚠️ Error connecting to server.");
+        }
+    });
+</script>
+
 
 </body>
 </html>

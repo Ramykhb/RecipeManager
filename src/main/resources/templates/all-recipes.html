@@ -297,13 +297,11 @@
                 body: JSON.stringify({ recipeId })
             })
                 .then(res => {
-                    if (res.ok) alert("Added to favorites!");
-                    else throw new Error("Failed to add to favorites.");
+                    if (!res.ok)throw new Error("Failed to add to favorites.");
                 })
                 .catch(err => alert(err.message));
         }
         else {
-            if (confirm("Are you sure you want to remove this recipe?")) {
                 button.style.backgroundImage = 'url("/images/star.svg")';
                 fetch(`/api/recipes/favorites/${recipeId}`, {
                     method: 'DELETE',
@@ -314,7 +312,6 @@
                             console.log("success");
                         } else alert("Failed to remove favorite");
                     });
-            }
         }
     }
 
@@ -329,9 +326,13 @@
         let url = '';
 
         if (title) {
+            if (sortOption) {
+                sortOption.value = "";
+            }
+            document.querySelector('.filter-container').style.display = 'none';
             url = `/api/recipes/search?title=${encodeURIComponent(title)}`;
-            if (sortOption) url += `&sort=${sortOption}`;
         } else {
+            document.querySelector('.filter-container').style.display = 'block';
             url = '/api/recipes';
             if (sortOption) {
                 switch (sortOption) {
