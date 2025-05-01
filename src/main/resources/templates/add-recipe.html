@@ -150,27 +150,27 @@
 <div id="container">
     <form id="recipeForm">
         <label for="title">Recipe Title: <span>*</span></label>
-        <input type="text" id="title" name="title" required />
+        <input autocomplete="off" type="text" id="title" name="title" required />
 
         <label for="description">Description: <span>*</span></label>
-        <textarea id="description" name="description" required></textarea>
+        <textarea autocomplete="off" id="description" name="description" required></textarea>
 
         <label for="ingredients">Ingredients: <span>*</span></label>
-        <input type="text" id="ingredients" name="ingredients" required/>
+        <input autocomplete="off" type="text" id="ingredients" name="ingredients" required/>
         <button id="ingredientsAdd">Add</button>
 
         <label for="instructions">Instructions: <span>*</span></label>
-        <input type="text" id="instructions" name="instructions" required/>
+        <input autocomplete="off" type="text" id="instructions" name="instructions" required/>
         <button id="instructionsAdd">Add</button>
 
         <label for="cookingTime">Cooking Time (in minutes): <span>*</span></label>
-        <input type="text" id="cookingTime" name="cookingTime" required />
+        <input autocomplete="off" type="number" id="cookingTime" name="cookingTime" required />
 
         <label for="category">Category: <span>*</span></label>
-        <input type="text" id="category" name="category" required />
+        <input autocomplete="off" type="text" id="category" name="category" required />
 
         <label for="imageURL">Image URL: </label>
-        <input type="text" id="imageURL" name="imageURL"/>
+        <input autocomplete="off" type="text" id="imageURL" name="imageURL"/>
 
         <button type="submit" id="submit">Add Recipe</button>
         <div class="message" id="message"></div>

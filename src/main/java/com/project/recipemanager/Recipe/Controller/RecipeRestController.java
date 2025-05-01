@@ -114,6 +114,7 @@ public class RecipeRestController {
             recipe.setInstructions(updatedRecipe.getInstructions());
             recipe.setCookingTime(updatedRecipe.getCookingTime());
             recipe.setCategory(updatedRecipe.getCategory());
+            recipe.setImageURL(recipeService.checkURL(updatedRecipe.getImageURL(), "https://www.cezarskitchen.com.my/wp-content/themes/consultix/images/no-image-found-360x250.png"));
             recipeRepository.save(recipe);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());

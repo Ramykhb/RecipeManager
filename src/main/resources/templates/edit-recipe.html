@@ -135,22 +135,22 @@
 <div id="container">
 <form id="recipeForm">
     <label for="title">Recipe Title: <span>*</span></label>
-    <input type="text" id="title" name="title" required />
+    <input autocomplete="off" type="text" id="title" name="title" required />
 
     <label for="description">Description: <span>*</span></label>
-    <textarea id="description" name="description" required></textarea>
+    <textarea autocomplete="off" id="description" name="description" required></textarea>
     <label for="ingredients">Ingredients (comma separated): <span>*</span></label>
-    <input type="text" id="ingredients" name="ingredients" placeholder="Enter ingredients separated by commas" required/>
+    <input autocomplete="off" type="text" id="ingredients" name="ingredients" placeholder="Enter ingredients separated by commas" required/>
     <label for="instructions">Instructions (comma separated): <span>*</span></label>
-    <input type="text" id="instructions" name="instructions" placeholder="Enter instructions separated by commas" required/>
+    <input autocomplete="off" type="text" id="instructions" name="instructions" placeholder="Enter instructions separated by commas" required/>
     <label for="cookingTime">Cooking Time (in minutes): <span>*</span></label>
-    <input type="text" id="cookingTime" name="cookingTime" required />
+    <input autocomplete="off" type="number" id="cookingTime" name="cookingTime" required />
 
     <label for="category">Category: <span>*</span></label>
-    <input type="text" id="category" name="category" required />
+    <input autocomplete="off" type="text" id="category" name="category" required />
 
     <label for="imageURL">Image URL: </label>
-    <input type="text" id="imageURL" name="imageURL"/>
+    <input autocomplete="off" type="text" id="imageURL" name="imageURL"/>
 
     <button type="submit" id="submit">Update Recipe</button>
 </form></div>
@@ -213,8 +213,7 @@
             });
 
             if (response.ok) {
-                alert('✅ Recipe updated successfully!');
-                window.location.href = `/recipes/my-posts/${recipeId}`;
+                window.location.href = "/recipes/my-posts";
             } else {
                 alert("❌ Failed to update recipe.");
             }
