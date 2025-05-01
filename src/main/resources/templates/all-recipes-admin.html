@@ -455,6 +455,14 @@
       }
     }
 
+    let user;
+
+    fetch(`/api/users/loggedInUser`)
+            .then(response => response.json())
+            .then(data => {
+              user = data;
+            })
+
     fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -499,6 +507,12 @@
                 card.appendChild(card_a);
                 card.appendChild(foot);
                 container.appendChild(card);
+                for (let i = 0; i < user.favorites.length; i++) {
+                  if (user.favorites[i] == recipe.id) {
+                    const button = document.getElementById(recipe.id);
+                    button.style.backgroundImage = 'url("/images/star-off.svg")';
+                  }
+                }
               });
 
             })

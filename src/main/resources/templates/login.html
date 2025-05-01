@@ -236,8 +236,6 @@
             const jsonData = {};
             formData.forEach((value, key) => {
                 jsonData[key] = value;
-                console.log(key);
-                console.log(value);
             });
 
             fetch('/api/users/login', {

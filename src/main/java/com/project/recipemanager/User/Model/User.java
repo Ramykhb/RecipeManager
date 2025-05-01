@@ -15,7 +15,7 @@ public class User {
     private String username;
     private String password;
     private boolean isAdmin;
-    private List<String> saved=new ArrayList<>();
+    private List<String> favorites=new ArrayList<>();
 
     public String getId() {
         return id;
@@ -50,7 +50,7 @@ public class User {
     }
 
     public List<String> getFavorites() {
-        return saved;
+        return favorites;
     }
 
 }

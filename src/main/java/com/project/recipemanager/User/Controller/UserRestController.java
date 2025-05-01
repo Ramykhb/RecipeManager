@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,6 +26,20 @@ public class UserRestController {
     @Autowired
     public UserRestController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/loggedInUser")
+    public ResponseEntity<?> loggedInUser(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("sessionId") == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        Optional<User> userOptional = userRepository.findById(session.getAttribute("sessionId").toString());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/signup")
