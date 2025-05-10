@@ -17,4 +17,14 @@ public class Controller {
         return "redirect:/recipes";
     }
 
+    @RequestMapping(value = "/swagger-ui")
+    public String swagger() {
+        return "redirect:/swagger-ui/index.html";
+    }
+
+    @RequestMapping(value = "/swagger-ui/")
+    public String swaggerv2() {
+        return "redirect:/swagger-ui/index.html";
+    }
+
 }

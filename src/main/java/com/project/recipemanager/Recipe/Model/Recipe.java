@@ -1,5 +1,6 @@
 package com.project.recipemanager.Recipe.Model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -10,26 +11,37 @@ import java.util.List;
 
 @Data
 @Document(collection = "Recipes")
+@Schema(description = "Recipe Model")
 public class Recipe {
     @Id
+    @Schema(example = "680a5bae7b06537d5a7389fe")
     private String id;
 
+    @Schema(example = "Sushi")
     private String title;
 
+    @Schema(example = "Delight in the simplicity and elegance of homemade sushi rolls...")
     private String description;
 
+    @Schema(example = "[\"sushi rice\", \"nori sheets\", \"fresh salmon\", \"avocado\", \"cucumber\"]")
     private List<String> ingredients;
 
+    @Schema(example = "[\"Prepare the sushi rice...\", \"Place a nori sheet...\", \"Roll tightly...\"]")
     private List<String> instructions;
 
+    @Schema(example = "50")
     private String cookingTime;
 
+    @Schema(example = "Main Dish")
     private String category;
 
+    @Schema(example = "680610645c3f5c05c29324a7")
     private String author;
 
+    @Schema(example = "2025-05-05")
     private String createdAt;
 
+    @Schema(example = "https://media.istockphoto.com/id/1053854126/photo/all-you-can-eat-sushi.jpg?s=612x612&w=0&k=20&c=qqPJBYcxR0fgmzIFj_k2V6Mbo12hBBCucs1i5HcGYA0=")
     private String imageURL;
 
     public String getId() {
